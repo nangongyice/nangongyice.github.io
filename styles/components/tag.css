@@ -1,0 +1,46 @@
+/* ============================================================
+   tag.css — 小标签
+   ============================================================ */
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  border-radius: var(--radius-xs);
+  background: var(--color-bg-mist);
+  color: var(--color-text-mute);
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-medium);
+  letter-spacing: var(--ls-wide);
+  line-height: 1.2;
+  white-space: nowrap;
+  transition: color var(--dur-hover) var(--ease-out),
+              background var(--dur-hover) var(--ease-out);
+}
+
+.tag__icon {
+  display: inline-flex;
+  align-items: center;
+  width: 12px;
+  height: 12px;
+}
+
+/* —— 变体 —— */
+.tag--brand {
+  background: var(--color-brand-soft);
+  color: var(--color-brand-ink);
+}
+.tag--outline {
+  background: transparent;
+  border: 1px solid var(--color-border-strong);
+  color: var(--color-text-mute);
+}
+.tag--ink {
+  background: var(--color-accent-ink);
+  color: var(--color-text-inv);
+}
+.tag--success {
+  background: rgba(47, 107, 63, 0.12);
+  color: var(--color-success);
+}

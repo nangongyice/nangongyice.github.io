@@ -1,0 +1,228 @@
+/* ============================================================
+   hero-banner.css — 3D 翻页 Hero Banner（S1）
+   - perspective: 1400px
+   - 当前张 rotateY(0)，新张从 rotateY(90) → 0，旧张 0 → -90
+   - 鼠标视差按 data-depth 分层
+   ============================================================ */
+
+.hero-banner {
+  position: relative;
+  height: 88vh;
+  min-height: 600px;
+  max-height: 860px;
+  overflow: hidden;
+  background: var(--color-bg-mist);
+  perspective: 1400px;
+  perspective-origin: center center;
+}
+
+/* —— 视口（3D stage） —— */
+.hero-banner__viewport {
+  position: absolute;
+  inset: 0;
+  transform-style: preserve-3d;
+}
+
+/* —— 单张 slide —— */
+.hero-banner__slide {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  opacity: 0;
+  transform: rotateY(90deg);
+  transform-origin: left center;
+  backface-visibility: hidden;
+  transition: transform var(--dur-banner) var(--ease-banner),
+              opacity var(--dur-banner) var(--ease-banner);
+  pointer-events: none;
+  will-change: transform, opacity;
+}
+
+.hero-banner__slide.is-active {
+  opacity: 1;
+  transform: rotateY(0deg);
+  pointer-events: auto;
+  z-index: 2;
+}
+
+.hero-banner__slide.is-outgoing {
+  opacity: 0;
+  transform: rotateY(-90deg);
+  z-index: 1;
+}
+
+/* —— 背景图（视差层 1） —— */
+.hero-banner__bg {
+  position: absolute;
+  inset: -8%;
+  z-index: 1;
+  will-change: transform;
+}
+
+.hero-banner__bg img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 0;
+  filter: saturate(0.9);
+}
+
+/* 渐变遮罩（保证文字可读） */
+.hero-banner__scrim {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  background:
+    linear-gradient(180deg, rgba(250,247,241,0.4) 0%, rgba(250,247,241,0) 30%),
+    linear-gradient(90deg, rgba(26,26,26,0.55) 0%, rgba(26,26,26,0.15) 45%, rgba(26,26,26,0) 70%),
+    linear-gradient(0deg, rgba(26,26,26,0.6) 0%, rgba(26,26,26,0) 40%);
+  will-change: transform;
+}
+
+/* —— 内容层（视差层 2，深度更大） —— */
+.hero-banner__content {
+  position: relative;
+  z-index: 3;
+  width: 100%;
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: var(--container-pad);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+  color: var(--color-text-inv);
+  will-change: transform;
+}
+
+.hero-banner__eyebrow {
+  font-family: var(--font-en);
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-semibold);
+  letter-spacing: var(--ls-wider);
+  text-transform: uppercase;
+  color: var(--color-brand);
+  text-shadow: 0 2px 12px rgba(0,0,0,0.4);
+}
+
+.hero-banner__title {
+  font-family: var(--font-cn);
+  font-size: clamp(40px, 6vw, 76px);
+  font-weight: var(--fw-semibold);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  margin: 0;
+  text-shadow: 0 4px 24px rgba(0,0,0,0.5);
+  max-width: 14ch;
+}
+
+.hero-banner__title--accent {
+  display: block;
+  color: var(--color-brand);
+  font-style: italic;
+}
+
+.hero-banner__subtitle {
+  font-size: clamp(15px, 1.6vw, 20px);
+  line-height: var(--lh-relaxed);
+  color: rgba(250, 247, 241, 0.88);
+  max-width: 540px;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.5);
+}
+
+.hero-banner__cta {
+  margin-top: 8px;
+}
+
+/* —— 底部 chrome（dots + 计数） —— */
+.hero-banner__chrome {
+  position: absolute;
+  bottom: 32px;
+  left: 0;
+  right: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-inline: var(--container-pad);
+  pointer-events: none;
+}
+
+.hero-banner__dots {
+  display: flex;
+  gap: 8px;
+  pointer-events: auto;
+}
+
+.hero-banner__dot {
+  width: 32px;
+  height: 4px;
+  border-radius: var(--radius-pill);
+  background: rgba(250, 247, 241, 0.35);
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  transition: background var(--dur-hover) var(--ease-out),
+              width var(--dur-card) var(--ease-out);
+}
+
+.hero-banner__dot.is-active {
+  background: var(--color-brand);
+  width: 56px;
+}
+
+.hero-banner__counter {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+  font-family: var(--font-brand);
+  color: rgba(250, 247, 241, 0.7);
+  font-size: 14px;
+  letter-spacing: 0.04em;
+}
+
+.hero-banner__counter-current {
+  color: var(--color-text-inv);
+  font-size: 18px;
+  font-weight: var(--fw-semibold);
+}
+
+.hero-banner__counter-sep { color: rgba(250, 247, 241, 0.4); }
+.hero-banner__counter-total { color: rgba(250, 247, 241, 0.4); }
+
+/* —— 移动端：降级为横向滑动 —— */
+@media (max-width: 768px) {
+  .hero-banner {
+    height: 76vh;
+    min-height: 520px;
+    perspective: none;
+  }
+  .hero-banner__slide {
+    transform: translateX(100%);
+    transform-origin: center;
+    transition: transform var(--dur-banner) var(--ease-banner), opacity var(--dur-banner) var(--ease-banner);
+  }
+  .hero-banner__slide.is-active { transform: translateX(0); }
+  .hero-banner__slide.is-outgoing { transform: translateX(-100%); }
+
+  .hero-banner__bg { inset: 0; }
+  .hero-banner__title { font-size: clamp(28px, 8vw, 44px); }
+  .hero-banner__subtitle { font-size: 15px; }
+  .hero-banner__chrome { bottom: 20px; padding-inline: 20px; }
+  .hero-banner__dot { width: 24px; }
+  .hero-banner__dot.is-active { width: 40px; }
+}
+
+/* —— reduced-motion 降级 —— */
+@media (prefers-reduced-motion: reduce) {
+  .hero-banner__slide,
+  .hero-banner__slide.is-active,
+  .hero-banner__slide.is-outgoing {
+    transition: opacity 300ms ease;
+    transform: none;
+  }
+  .hero-banner__bg,
+  .hero-banner__scrim,
+  .hero-banner__content { transform: none !important; }
+}

@@ -1,0 +1,101 @@
+/* ============================================================
+   _base.css — 全局基础样式
+   ============================================================ */
+
+:root {
+  --header-h: 72px;
+}
+
+body {
+  font-family: var(--font-cn);
+  font-size: var(--fs-body);
+  font-weight: var(--fw-regular);
+  color: var(--color-text-ink);
+  background: var(--color-bg-cream);
+  overflow-x: hidden;
+}
+
+/* —— App 根容器 —— */
+#app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+#view {
+  flex: 1;
+  position: relative;
+}
+
+/* —— 排版默认 —— */
+h1, h2, h3, h4, h5, h6 {
+  font-weight: var(--fw-semibold);
+  line-height: var(--lh-snug);
+  letter-spacing: var(--ls-tight);
+}
+
+h1 { font-size: var(--fs-h1); }
+h2 { font-size: var(--fs-h2); }
+h3 { font-size: var(--fs-h3); }
+
+p { line-height: var(--lh-normal); }
+
+strong, b { font-weight: var(--fw-semibold); }
+
+em, i { font-style: normal; }
+
+/* —— 链接 —— */
+a {
+  transition: color var(--dur-hover) var(--ease-out);
+}
+
+/* —— 容器 —— */
+.container {
+  width: 100%;
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding-inline: var(--container-pad);
+}
+
+.container--narrow { max-width: var(--container-narrow); }
+.container--wide { max-width: var(--container-wide); }
+
+/* —— 区块节奏 —— */
+.section {
+  padding-block: var(--section-py);
+}
+
+.section + .section { padding-top: 0; }
+
+/* —— 图片 —— */
+img {
+  border-radius: var(--radius-md);
+}
+
+/* —— 滚动条（克制美化） —— */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-bg-mist);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-border-strong);
+  border-radius: var(--radius-pill);
+  border: 2px solid var(--color-bg-mist);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-text-faint);
+}
+
+/* —— 全局响应式 header-h —— */
+@media (max-width: 1024px) {
+  :root { --header-h: 60px; }
+}
+
+/* —— 触屏设备 / reduced-motion 自动隐藏定制光标 —— */
+@media (max-width: 1024px), (pointer: coarse) {
+  body.has-custom-cursor .custom-cursor { display: none !important; }
+  body.has-custom-cursor { cursor: auto; }
+}

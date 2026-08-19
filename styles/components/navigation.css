@@ -1,0 +1,75 @@
+/* ============================================================
+   navigation.css — 主导航
+   ============================================================ */
+
+.nav {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex: 1;
+  justify-content: center;
+}
+
+.nav__item {
+  position: relative;
+}
+
+.nav__link {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 8px 16px;
+  border-radius: var(--radius-sm);
+  color: var(--color-text-mute);
+  transition: color var(--dur-hover) var(--ease-out),
+              background var(--dur-hover) var(--ease-out);
+}
+
+.nav__link:hover {
+  color: var(--color-text-ink);
+  background: var(--color-bg-mist);
+}
+
+.nav__item.is-active .nav__link {
+  color: var(--color-text-ink);
+}
+
+.nav__item.is-active .nav__link::after {
+  content: '';
+  position: absolute;
+  bottom: 2px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 6px;
+  height: 6px;
+  border-radius: var(--radius-circle);
+  background: var(--color-brand);
+}
+
+.nav__label {
+  font-family: var(--font-cn);
+  font-size: var(--fs-body-sm);
+  font-weight: var(--fw-medium);
+  letter-spacing: var(--ls-wide);
+}
+
+.nav__sub {
+  font-family: var(--font-en);
+  font-size: 10px;
+  font-weight: var(--fw-medium);
+  letter-spacing: var(--ls-wider);
+  text-transform: uppercase;
+  color: var(--color-text-faint);
+  margin-top: 0;
+}
+
+.nav__item.is-active .nav__sub {
+  color: var(--color-brand);
+}
+
+@media (max-width: 1024px) {
+  .nav { gap: 0; justify-content: flex-start; overflow-x: auto; }
+  .nav__sub { display: none; }
+  .nav__link { padding: 8px 12px; }
+}

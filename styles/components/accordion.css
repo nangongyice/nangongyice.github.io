@@ -1,0 +1,121 @@
+/* ============================================================
+   accordion.css — 课程目录折叠面板
+   ============================================================ */
+
+.accordion {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.accordion__item {
+  border-bottom: 1px solid var(--color-border);
+  transition: background var(--dur-hover) var(--ease-out);
+}
+
+.accordion__item:last-child { border-bottom: none; }
+
+.accordion__item.is-current { background: var(--color-brand-soft); }
+
+.accordion__head {
+  display: grid;
+  grid-template-columns: 32px 1fr auto auto auto;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 16px 24px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  font-family: var(--font-cn);
+  transition: background var(--dur-hover) var(--ease-out);
+}
+
+.accordion__head:hover { background: var(--color-bg-mist); }
+
+.accordion__item.is-current .accordion__head:hover { background: var(--color-brand-soft); }
+
+.accordion__index {
+  font-family: var(--font-brand);
+  font-size: var(--fs-h3);
+  font-weight: var(--fw-medium);
+  color: var(--color-text-faint);
+  letter-spacing: -0.02em;
+}
+
+.accordion__item.is-current .accordion__index { color: var(--color-brand); }
+
+.accordion__title {
+  font-size: var(--fs-body);
+  font-weight: var(--fw-medium);
+  color: var(--color-text-ink);
+  line-height: var(--lh-snug);
+  letter-spacing: var(--ls-tight);
+}
+
+.accordion__item.is-current .accordion__title { color: var(--color-brand-ink); font-weight: var(--fw-semibold); }
+
+.accordion__duration {
+  font-family: var(--font-en);
+  font-size: var(--fs-xs);
+  color: var(--color-text-faint);
+  letter-spacing: var(--ls-wide);
+}
+
+.accordion__done {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  background: var(--color-success);
+  color: #FFFFFF;
+  font-size: 11px;
+  font-weight: var(--fw-bold);
+  border-radius: var(--radius-circle);
+}
+
+.accordion__chevron {
+  display: inline-flex;
+  color: var(--color-text-faint);
+  transition: transform var(--dur-hover) var(--ease-out);
+}
+
+.accordion__item.is-open .accordion__chevron {
+  transform: rotate(180deg);
+  color: var(--color-text-ink);
+}
+
+/* —— Panel —— */
+.accordion__panel {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height var(--dur-card) var(--ease-out);
+}
+
+.accordion__item.is-open .accordion__panel {
+  max-height: 240px;
+}
+
+.accordion__panel-inner {
+  padding: 0 24px 18px 68px;
+  font-size: var(--fs-body-sm);
+  color: var(--color-text-mute);
+  line-height: var(--lh-normal);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.accordion__panel-inner p { margin: 0; }
+
+@media (max-width: 768px) {
+  .accordion__head {
+    grid-template-columns: 28px 1fr auto auto;
+    gap: 8px;
+    padding: 14px 16px;
+  }
+  .accordion__duration { display: none; }
+  .accordion__panel-inner { padding: 0 16px 14px 52px; }
+}

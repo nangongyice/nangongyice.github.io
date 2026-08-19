@@ -1,0 +1,47 @@
+/* ============================================================
+   _motion.css — 动效令牌
+   原则：小动作快、大动作慢；统一 Motion 系统
+   ============================================================ */
+
+:root {
+  /* —— 时长 —— */
+  --dur-hover:    200ms;    /* Hover 150-250ms */
+  --dur-card:    300ms;    /* 卡片动效 250-350ms */
+  --dur-scroll:  600ms;    /* 滚动入场 500-700ms */
+  --dur-page:    450ms;    /* 页面转场 350-600ms */
+  --dur-banner:  1000ms;   /* Banner 切换 800-1200ms */
+  --dur-intro:   1500ms;   /* 首屏动画 1200-1800ms */
+
+  /* —— 缓动函数（统一 Motion 系统） —— */
+  --ease-out:        cubic-bezier(0.22, 1, 0.36, 1);     /* 标准 ease-out，轻盈落页 */
+  --ease-in-out:     cubic-bezier(0.65, 0, 0.35, 1);
+  --ease-spring:     cubic-bezier(0.34, 1.56, 0.64, 1);  /* 弹性（克制使用） */
+  --ease-page:       cubic-bezier(0.65, 0.05, 0.36, 1); /* 页面转场专用 */
+  --ease-banner:     cubic-bezier(0.7, 0, 0.3, 1);      /* Banner 翻页专用 */
+
+  /* —— 位移幅度 —— */
+  --translate-entrance: 30px;   /* 入场位移 */
+
+  /* —— 性能约定 —— */
+  /* 持续动画用 transform/opacity + requestAnimationFrame，避免重排 */
+}
+
+/* —— prefers-reduced-motion 降级 —— */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --dur-hover:   100ms;
+    --dur-card:   100ms;
+    --dur-scroll: 200ms;
+    --dur-page:   200ms;
+    --dur-banner: 400ms;
+    --dur-intro:  400ms;
+    --ease-spring: var(--ease-out);
+  }
+
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

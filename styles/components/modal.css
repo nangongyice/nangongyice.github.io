@@ -1,0 +1,98 @@
+/* ============================================================
+   modal.css — 模态浮层
+   ============================================================ */
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: var(--color-overlay);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity var(--dur-card) var(--ease-out),
+              visibility var(--dur-card);
+  z-index: 1000;
+}
+
+.modal-overlay.is-open {
+  opacity: 1;
+  visibility: visible;
+}
+
+.modal {
+  position: relative;
+  width: 100%;
+  max-width: 480px;
+  padding: 32px;
+  background: var(--color-bg-white);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-xl);
+  transform: translateY(20px) scale(0.98);
+  opacity: 0;
+  transition: transform var(--dur-card) var(--ease-spring),
+              opacity var(--dur-card) var(--ease-out);
+}
+
+.modal-overlay.is-open .modal {
+  transform: translateY(0) scale(1);
+  opacity: 1;
+}
+
+.modal__close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 36px;
+  height: 36px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  color: var(--color-text-faint);
+  cursor: pointer;
+  border-radius: var(--radius-circle);
+  transition: background var(--dur-hover) var(--ease-out),
+              color var(--dur-hover) var(--ease-out);
+}
+
+.modal__close:hover {
+  background: var(--color-bg-mist);
+  color: var(--color-text-ink);
+}
+
+.modal__title {
+  font-family: var(--font-cn);
+  font-size: var(--fs-h2);
+  font-weight: var(--fw-semibold);
+  line-height: var(--lh-snug);
+  letter-spacing: var(--ls-tight);
+  color: var(--color-text-ink);
+  margin-bottom: 12px;
+  padding-right: 32px;
+}
+
+.modal__body {
+  font-size: var(--fs-body);
+  color: var(--color-text-mute);
+  line-height: var(--lh-relaxed);
+}
+
+.modal__actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+@media (max-width: 600px) {
+  .modal-overlay { padding: 16px; }
+  .modal { padding: 24px; }
+  .modal__title { font-size: var(--fs-h3); }
+}

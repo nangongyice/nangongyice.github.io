@@ -1,0 +1,63 @@
+/* ============================================================
+   _typography.css — 字体/字号/字重/行高
+   字体体系：中文 Noto Sans SC + 英文 Inter + 品牌 Space Grotesk
+   ============================================================ */
+
+:root {
+  /* —— 字体族 —— */
+  --font-cn:    'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  --font-en:    'Inter', 'Helvetica Neue', system-ui, sans-serif;
+  --font-brand: 'Space Grotesk', 'Inter', sans-serif;
+  --font-mono:  'SF Mono', 'Menlo', 'Consolas', monospace;
+
+  /* —— 字重（仅四档） —— */
+  --fw-regular: 400;
+  --fw-medium:  500;
+  --fw-semibold: 600;
+  --fw-bold:    700;
+
+  /* —— PC 字号阶梯 —— */
+  --fs-display: 84px;        /* 品牌大标题 */
+  --fs-display-lg: 96px;     /* 极端场景 */
+  --fs-h1: 44px;             /* 页面主标题 */
+  --fs-h2: 30px;             /* 区块标题 */
+  --fs-h3: 22px;             /* 子标题 */
+  --fs-body-lg: 17px;        /* 大正文 */
+  --fs-body: 16px;           /* 标准正文 */
+  --fs-body-sm: 15px;        /* 紧凑正文 */
+  --fs-sm: 13px;             /* 辅助文字 */
+  --fs-xs: 12px;             /* 标签/微小字 */
+  --fs-chapter: 100px;       /* 章节大号编号 PC */
+  --fs-chapter-sm: 56px;     /* 章节编号移动端 */
+
+  /* —— 行高 —— */
+  --lh-tight:   1.2;         /* 大标题 */
+  --lh-snug:    1.35;        /* 标题 */
+  --lh-normal:  1.6;         /* 正文 */
+  --lh-relaxed: 1.8;         /* 长文阅读 */
+
+  /* —— 字距 —— */
+  --ls-tight:  -0.02em;      /* 英文大标题负字距 */
+  --ls-normal: 0;
+  --ls-wide:   0.06em;       /* 小标签宽字距 */
+  --ls-wider:  0.12em;      /* 极宽字距（标签大写） */
+}
+
+@media (max-width: 768px) {
+  :root {
+    --fs-display: 48px;
+    --fs-display-lg: 56px;
+    --fs-h1: 30px;
+    --fs-h2: 24px;
+    --fs-h3: 18px;
+    --fs-body-lg: 16px;
+    --fs-body: 15px;
+    --fs-body-sm: 14px;
+    --fs-chapter: 64px;
+  }
+}
+
+/* —— 字体应用约定 —— */
+/* 中文信息 → var(--font-cn) */
+/* 英文/数字 → var(--font-en)，混排时外层用 cn 即可 */
+/* 品牌标题/章节编号 → var(--font-brand) */

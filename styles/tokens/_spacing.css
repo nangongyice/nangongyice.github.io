@@ -1,0 +1,45 @@
+/* ============================================================
+   _spacing.css — 4/8 栅格间距令牌
+   ============================================================ */
+
+:root {
+  /* —— 基础步长 —— */
+  --sp-1:  4px;
+  --sp-2:  8px;
+  --sp-3:  12px;
+  --sp-4:  16px;
+  --sp-5:  20px;
+  --sp-6:  24px;
+  --sp-8:  32px;
+  --sp-10: 40px;
+  --sp-12: 48px;
+  --sp-16: 64px;
+  --sp-20: 80px;
+  --sp-24: 96px;
+  --sp-32: 128px;
+
+  /* —— 容器宽度 —— */
+  --container-max: 1280px;
+  --container-narrow: 960px;
+  --container-wide: 1440px;
+  --container-pad: clamp(20px, 5vw, 64px);
+
+  /* —— 区块垂直节奏 —— */
+  --section-py: clamp(64px, 8vw, 128px);
+  --section-gap: clamp(48px, 6vw, 96px);
+
+  /* —— 组件内边距约定 —— */
+  --pad-card: 24px;
+  --pad-card-lg: 32px;
+  --pad-input: 12px 16px;
+  --pad-button: 12px 24px;
+}
+
+@media (max-width: 768px) {
+  :root {
+    --section-py: 56px;
+    --section-gap: 40px;
+    --pad-card: 18px;
+    --pad-card-lg: 24px;
+  }
+}

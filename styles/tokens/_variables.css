@@ -1,0 +1,11 @@
+/* ============================================================
+   _variables.css — 设计令牌总入口
+   顺序：colors → typography → spacing → radius → shadows → motion
+   ============================================================ */
+
+@import '_colors.css';
+@import '_typography.css';
+@import '_spacing.css';
+@import '_radius.css';
+@import '_shadows.css';
+@import '_motion.css';

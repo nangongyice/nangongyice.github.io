@@ -1,0 +1,97 @@
+/* ============================================================
+   cursor.css — 定制光标
+   桌面端 + 非 reduced-motion 才启用
+   ============================================================ */
+
+body.has-custom-cursor {
+  cursor: none;
+}
+
+body.has-custom-cursor a,
+body.has-custom-cursor button,
+body.has-custom-cursor input,
+body.has-custom-cursor textarea,
+body.has-custom-cursor select {
+  cursor: none;
+}
+
+.custom-cursor {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+  z-index: 9999;
+  mix-blend-mode: difference;
+}
+
+.custom-cursor__dot,
+.custom-cursor__ring {
+  position: absolute;
+  top: 0;
+  left: 0;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: width 250ms var(--ease-out),
+              height 250ms var(--ease-out),
+              background 250ms var(--ease-out),
+              border-color 250ms var(--ease-out);
+}
+
+.custom-cursor__dot {
+  width: 8px;
+  height: 8px;
+  background: var(--color-brand);
+}
+
+.custom-cursor__ring {
+  width: 32px;
+  height: 32px;
+  border: 1.5px solid var(--color-text-ink);
+  transition: width 250ms var(--ease-out),
+              height 250ms var(--ease-out),
+              border-color 250ms var(--ease-out),
+              transform 80ms linear;
+}
+
+.custom-cursor.is-hovering .custom-cursor__ring {
+  width: 56px;
+  height: 56px;
+  border-color: var(--color-brand);
+}
+
+.custom-cursor.is-hovering .custom-cursor__dot {
+  background: var(--color-brand);
+}
+
+.custom-cursor[data-variant="open"] .custom-cursor__ring {
+  width: 80px;
+  height: 80px;
+  border-color: var(--color-brand);
+}
+
+.custom-cursor[data-variant="open"] .custom-cursor__ring::after {
+  content: '打开';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-family: var(--font-cn);
+  font-size: 11px;
+  font-weight: var(--fw-medium);
+  color: var(--color-brand);
+  letter-spacing: var(--ls-wide);
+}
+
+@media (max-width: 1024px), (pointer: coarse) {
+  body.has-custom-cursor { cursor: auto; }
+  body.has-custom-cursor * { cursor: auto; }
+  .custom-cursor { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body.has-custom-cursor { cursor: auto; }
+  body.has-custom-cursor * { cursor: auto; }
+  .custom-cursor { display: none; }
+}

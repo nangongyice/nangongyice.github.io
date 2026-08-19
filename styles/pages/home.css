@@ -1,0 +1,196 @@
+/* ============================================================
+   home.css — 首页样式
+   ============================================================ */
+
+/* —— Section 通用 —— */
+.section__header {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 48px;
+}
+
+.section__eyebrow {
+  font-family: var(--font-en);
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-semibold);
+  letter-spacing: var(--ls-wider);
+  text-transform: uppercase;
+  color: var(--color-brand);
+}
+
+.section__title {
+  font-family: var(--font-cn);
+  font-size: var(--fs-h1);
+  font-weight: var(--fw-semibold);
+  line-height: var(--lh-tight);
+  letter-spacing: var(--ls-tight);
+  color: var(--color-text-ink);
+}
+
+.section__desc {
+  max-width: 600px;
+  font-size: var(--fs-body);
+  color: var(--color-text-mute);
+  line-height: var(--lh-relaxed);
+}
+
+.section__chapter {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+/* —— 精选内容 —— */
+.home-featured__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+@media (max-width: 1024px) { .home-featured__grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 640px)  { .home-featured__grid { grid-template-columns: 1fr; } }
+
+/* —— 正在发生 —— */
+.home-happening__list {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0;
+  border-top: 1px solid var(--color-border);
+}
+
+.happening-item {
+  border-right: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.happening-item:nth-child(3n) { border-right: none; }
+
+.happening-item a {
+  display: block;
+  padding: 24px;
+  height: 100%;
+  transition: background var(--dur-hover) var(--ease-out);
+}
+
+.happening-item a:hover { background: var(--color-bg-white); }
+
+.happening-item__time {
+  display: inline-block;
+  font-family: var(--font-en);
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-medium);
+  letter-spacing: var(--ls-wide);
+  color: var(--color-brand);
+  margin-bottom: 12px;
+}
+
+.happening-item__title {
+  font-size: var(--fs-h3);
+  font-weight: var(--fw-semibold);
+  margin-bottom: 8px;
+  line-height: var(--lh-snug);
+}
+
+.happening-item__desc {
+  font-size: var(--fs-body-sm);
+  color: var(--color-text-mute);
+  line-height: var(--lh-normal);
+}
+
+.home-happening__testimonials {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin-top: 48px;
+  padding-top: 48px;
+  border-top: 1px dashed var(--color-border-strong);
+}
+
+.testimonial__content {
+  font-family: var(--font-cn);
+  font-size: var(--fs-body);
+  line-height: var(--lh-relaxed);
+  color: var(--color-text-ink);
+  margin-bottom: 12px;
+}
+
+.testimonial__author {
+  font-family: var(--font-en);
+  font-size: var(--fs-xs);
+  color: var(--color-text-mute);
+  letter-spacing: var(--ls-wide);
+}
+
+@media (max-width: 768px) {
+  .home-happening__list { grid-template-columns: 1fr; }
+  .happening-item { border-right: none; }
+  .home-happening__testimonials { grid-template-columns: 1fr; gap: 16px; }
+}
+
+/* —— 热门课程 —— */
+.home-popular__grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+}
+
+@media (max-width: 1024px) { .home-popular__grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 640px)  { .home-popular__grid { grid-template-columns: 1fr; } }
+
+/* —— 创作者 —— */
+.home-creators__grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+}
+
+@media (max-width: 768px) { .home-creators__grid { grid-template-columns: 1fr; } }
+
+/* —— 品牌区 —— */
+.home-brand__inner {
+  text-align: center;
+  max-width: 720px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.home-brand__title {
+  font-family: var(--font-cn);
+  font-size: var(--fs-display);
+  font-weight: var(--fw-semibold);
+  line-height: var(--lh-tight);
+  letter-spacing: var(--ls-tight);
+  color: var(--color-text-ink);
+}
+
+.home-brand__desc {
+  font-size: var(--fs-body-lg);
+  color: var(--color-text-mute);
+  line-height: var(--lh-relaxed);
+  max-width: 540px;
+  margin-bottom: 8px;
+}
+
+@media (max-width: 768px) {
+  .home-brand__title { font-size: var(--fs-display); }
+}
+
+/* —— 首屏 intro 动画占位 —— */
+body.is-intro .section,
+body.is-intro .hero-banner {
+  opacity: 0;
+}
+
+body.is-intro .hero-banner {
+  opacity: 1;
+  animation: home-intro-hero 1500ms var(--ease-out) forwards;
+}
+
+@keyframes home-intro-hero {
+  0% { opacity: 0; transform: scale(0.98); }
+  100% { opacity: 1; transform: scale(1); }
+}

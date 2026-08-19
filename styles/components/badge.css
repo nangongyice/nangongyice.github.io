@@ -1,0 +1,35 @@
+/* ============================================================
+   badge.css — 计数徽标
+   ============================================================ */
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  border-radius: var(--radius-pill);
+  background: var(--color-brand);
+  color: #FFFFFF;
+  font-family: var(--font-en);
+  font-size: 11px;
+  font-weight: var(--fw-semibold);
+  line-height: 1;
+  letter-spacing: 0;
+  box-shadow: 0 0 0 2px var(--color-bg-cream);
+}
+
+.badge--hidden { display: none; }
+
+/* 跳动动画（购买成功时触发） */
+.badge.is-bump {
+  animation: badge-bump 600ms var(--ease-spring);
+}
+
+@keyframes badge-bump {
+  0%   { transform: scale(1); }
+  40%  { transform: scale(1.4); }
+  70%  { transform: scale(0.9); }
+  100% { transform: scale(1); }
+}

@@ -1,0 +1,81 @@
+/* ============================================================
+   dropdown.css — 下拉筛选（备用）
+   ============================================================ */
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown__trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  background: var(--color-bg-white);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  color: var(--color-text-ink);
+  font-family: var(--font-cn);
+  font-size: var(--fs-body-sm);
+  font-weight: var(--fw-medium);
+  cursor: pointer;
+  transition: border-color var(--dur-hover) var(--ease-out),
+              color var(--dur-hover) var(--ease-out);
+}
+
+.dropdown__trigger:hover { border-color: var(--color-border-strong); }
+
+.dropdown__trigger svg {
+  width: 14px;
+  height: 14px;
+  transition: transform var(--dur-hover) var(--ease-out);
+}
+
+.dropdown[data-open="true"] .dropdown__trigger svg {
+  transform: rotate(180deg);
+}
+
+.dropdown__menu {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  min-width: 160px;
+  padding: 6px;
+  background: var(--color-bg-white);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-6px);
+  transition: opacity var(--dur-hover) var(--ease-out),
+              transform var(--dur-hover) var(--ease-out),
+              visibility var(--dur-hover);
+  z-index: 30;
+}
+
+.dropdown[data-open="true"] .dropdown__menu {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.dropdown__item {
+  display: block;
+  width: 100%;
+  padding: 8px 12px;
+  background: transparent;
+  border: none;
+  border-radius: var(--radius-xs);
+  color: var(--color-text-mute);
+  font-family: var(--font-cn);
+  font-size: var(--fs-body-sm);
+  text-align: left;
+  cursor: pointer;
+  transition: background var(--dur-hover) var(--ease-out),
+              color var(--dur-hover) var(--ease-out);
+}
+
+.dropdown__item:hover { background: var(--color-bg-mist); color: var(--color-text-ink); }
+.dropdown__item.is-active { color: var(--color-brand); font-weight: var(--fw-semibold); }

@@ -1,0 +1,237 @@
+/* ============================================================
+   header.css — 顶部导航栏
+   ============================================================ */
+
+#site-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(250, 247, 241, 0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid transparent;
+  transition: background var(--dur-hover) var(--ease-out),
+              border-color var(--dur-hover) var(--ease-out),
+              box-shadow var(--dur-hover) var(--ease-out);
+}
+
+#site-header.is-scrolled {
+  background: rgba(250, 247, 241, 0.95);
+  border-bottom-color: var(--color-border);
+  box-shadow: var(--shadow-xs);
+}
+
+.header__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 72px;
+  gap: 24px;
+}
+
+/* —— Logo —— */
+.header__logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+  color: var(--color-text-ink);
+  transition: opacity var(--dur-hover) var(--ease-out);
+}
+
+.header__logo:hover { opacity: 0.7; }
+
+.header__logo-mark {
+  display: flex;
+  color: var(--color-brand);
+}
+
+.header__logo-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1;
+}
+
+.header__logo-en {
+  font-family: var(--font-brand);
+  font-size: 14px;
+  font-weight: var(--fw-semibold);
+  letter-spacing: var(--ls-wide);
+  color: var(--color-text-ink);
+}
+
+.header__logo-cn {
+  font-family: var(--font-cn);
+  font-size: 11px;
+  font-weight: var(--fw-medium);
+  letter-spacing: var(--ls-wider);
+  color: var(--color-text-faint);
+  margin-top: 2px;
+}
+
+/* —— 右侧 —— */
+.header__right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+.header__nav-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 10px;
+  border-radius: var(--radius-sm);
+  color: var(--color-text-mute);
+  font-size: var(--fs-sm);
+  position: relative;
+  transition: color var(--dur-hover) var(--ease-out),
+              background var(--dur-hover) var(--ease-out);
+}
+
+.header__nav-item:hover {
+  color: var(--color-text-ink);
+  background: var(--color-bg-mist);
+}
+
+.header__nav-label {
+  font-weight: var(--fw-medium);
+  letter-spacing: var(--ls-wide);
+}
+
+.header__badge {
+  display: inline-flex;
+  align-items: center;
+  margin-left: 2px;
+}
+
+.header__avatar-link {
+  display: inline-flex;
+}
+
+.header__avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-circle);
+  background: var(--gradient-brand);
+  color: #FFFFFF;
+  font-family: var(--font-brand);
+  font-size: 14px;
+  font-weight: var(--fw-semibold);
+  box-shadow: var(--shadow-xs);
+}
+
+/* 书架导航 bump 动画（购买成功时） */
+.header__nav-item--bookshelf.is-bump {
+  animation: header-bookshelf-bump 600ms var(--ease-spring);
+}
+
+@keyframes header-bookshelf-bump {
+  0%   { transform: scale(1); }
+  40%  { transform: scale(1.15); color: var(--color-brand); }
+  100% { transform: scale(1); }
+}
+
+/* —— 汉堡按钮（仅移动端显示） —— */
+.header__hamburger {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  width: 44px;
+  height: 44px;
+  padding: 11px 10px;
+  border-radius: var(--radius-sm);
+  color: var(--color-text-ink);
+  transition: background var(--dur-hover) var(--ease-out);
+}
+.header__hamburger:hover { background: var(--color-bg-mist); }
+.header__hamburger span {
+  display: block;
+  height: 1.8px;
+  width: 100%;
+  background: currentColor;
+  border-radius: 2px;
+  transition: transform var(--dur-hover) var(--ease-out),
+              opacity var(--dur-hover) var(--ease-out);
+}
+.header__inner.is-menu-open .header__hamburger span:nth-child(1) {
+  transform: translateY(6.8px) rotate(45deg);
+}
+.header__inner.is-menu-open .header__hamburger span:nth-child(2) {
+  opacity: 0;
+}
+.header__inner.is-menu-open .header__hamburger span:nth-child(3) {
+  transform: translateY(-6.8px) rotate(-45deg);
+}
+
+/* —— 移动端 —— */
+@media (max-width: 1024px) {
+  .header__inner { height: 60px; gap: 12px; }
+  .header__logo-text { display: none; }
+  .header__nav-label { display: none; }
+  .header__nav-item { padding: 8px; }
+}
+
+@media (max-width: 768px) {
+  .header__right { gap: 8px; }
+  .header__hamburger { display: flex; }
+
+  /* 主导航改为下拉抽屉 */
+  .header__nav {
+    position: fixed;
+    top: 60px;
+    left: 0;
+    right: 0;
+    z-index: 90;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    padding: 8px 0 16px;
+    background: rgba(250, 247, 241, 0.98);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--color-border);
+    box-shadow: var(--shadow-sm);
+    transform: translateY(-12px);
+    opacity: 0;
+    pointer-events: none;
+    visibility: hidden;
+    transition: transform var(--dur-card) var(--ease-out),
+                opacity var(--dur-hover) var(--ease-out),
+                visibility 0s linear var(--dur-card);
+  }
+  .header__inner.is-menu-open .header__nav {
+    transform: translateY(0);
+    opacity: 1;
+    pointer-events: auto;
+    visibility: visible;
+    transition: transform var(--dur-card) var(--ease-out),
+                opacity var(--dur-hover) var(--ease-out),
+                visibility 0s;
+  }
+  /* 抽屉内导航项变成整行按钮 */
+  .nav { flex-direction: column; align-items: stretch; gap: 2px; padding: 0 12px; }
+  .nav__link {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    min-height: 44px;
+    padding: 10px 12px;
+  }
+  .nav__sub { display: inline; font-size: 11px; }
+  .nav__item.is-active .nav__link::after {
+    position: static;
+    transform: none;
+  }
+
+  /* 触控热区下限 44px */
+  .header__nav-item { min-width: 44px; min-height: 44px; }
+  .header__login { min-height: 44px; }
+  .searchbar__toggle { width: 44px; height: 44px; }
+}

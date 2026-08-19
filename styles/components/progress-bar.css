@@ -1,0 +1,54 @@
+/* ============================================================
+   progress-bar.css — 学习进度条
+   ============================================================ */
+
+.progress-bar {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+}
+
+.progress-bar__track {
+  position: relative;
+  flex: 1;
+  height: 6px;
+  background: var(--color-bg-mist);
+  border-radius: var(--radius-pill);
+  overflow: hidden;
+}
+
+.progress-bar__fill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 0%;
+  background: var(--gradient-brand);
+  border-radius: var(--radius-pill);
+  transition: width var(--dur-scroll) var(--ease-out);
+}
+
+.progress-bar--animated .progress-bar__fill {
+  transition: width 800ms var(--ease-out);
+}
+
+.progress-bar__label {
+  font-family: var(--font-en);
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-medium);
+  color: var(--color-text-mute);
+  min-width: 36px;
+  text-align: right;
+}
+
+/* —— 尺寸 —— */
+.progress-bar--sm .progress-bar__track { height: 4px; }
+.progress-bar--lg .progress-bar__track { height: 8px; }
+.progress-bar--lg .progress-bar__fill { height: 8px; }
+
+/* —— 变体：在反白底上 —— */
+.progress-bar--inverse .progress-bar__track {
+  background: rgba(250, 247, 241, 0.15);
+}
+.progress-bar--inverse .progress-bar__label {
+  color: var(--color-text-inv);
+}

@@ -1,0 +1,43 @@
+/* ============================================================
+   empty-state.css — 空状态
+   ============================================================ */
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding: clamp(48px, 8vw, 96px) 24px;
+  text-align: center;
+  background: var(--color-bg-white);
+  border: 1px dashed var(--color-border-strong);
+  border-radius: var(--radius-xl);
+}
+
+.empty-state__visual {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 96px;
+  height: 96px;
+  border-radius: var(--radius-circle);
+  background: var(--color-bg-mist);
+  color: var(--color-text-faint);
+}
+
+.empty-state__title {
+  font-family: var(--font-cn);
+  font-size: var(--fs-h3);
+  font-weight: var(--fw-semibold);
+  color: var(--color-text-ink);
+}
+
+.empty-state__desc {
+  font-size: var(--fs-body-sm);
+  color: var(--color-text-mute);
+  line-height: var(--lh-normal);
+  max-width: 420px;
+}
+
+.empty-state .btn { margin-top: 8px; }

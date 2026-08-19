@@ -1,0 +1,105 @@
+/* ============================================================
+   creator-card.css — 创作者卡片
+   ============================================================ */
+
+.creator-card {
+  position: relative;
+  display: block;
+  background: var(--color-bg-white);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-card);
+  overflow: hidden;
+  transition: transform var(--dur-card) var(--ease-out),
+              box-shadow var(--dur-card) var(--ease-out),
+              border-color var(--dur-card) var(--ease-out);
+}
+
+.creator-card:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-card-hover);
+  border-color: var(--color-border-strong);
+}
+
+.creator-card__inner {
+  display: flex;
+  gap: 24px;
+  padding: 28px;
+}
+
+.creator-card__avatar-slot {
+  flex-shrink: 0;
+}
+
+.creator-card__body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.creator-card__name {
+  font-family: var(--font-cn);
+  font-size: var(--fs-h3);
+  font-weight: var(--fw-semibold);
+  line-height: var(--lh-snug);
+  color: var(--color-text-ink);
+}
+
+.creator-card__profession {
+  font-family: var(--font-en);
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-medium);
+  letter-spacing: var(--ls-wide);
+  color: var(--color-brand);
+}
+
+.creator-card__bio {
+  font-size: var(--fs-body-sm);
+  color: var(--color-text-mute);
+  line-height: var(--lh-relaxed);
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  margin: 4px 0;
+}
+
+.creator-card__stats {
+  display: flex;
+  gap: 32px;
+  margin-top: auto;
+  padding-top: 12px;
+  border-top: 1px dashed var(--color-border-strong);
+}
+
+.creator-card__stat {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.creator-card__stat-num {
+  font-family: var(--font-en);
+  font-size: var(--fs-h3);
+  font-weight: var(--fw-semibold);
+  color: var(--color-text-ink);
+  letter-spacing: -0.02em;
+}
+
+.creator-card__stat-label {
+  font-size: var(--fs-xs);
+  color: var(--color-text-faint);
+  letter-spacing: var(--ls-wide);
+}
+
+.creator-card__specialty {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 12px;
+}
+
+@media (max-width: 768px) {
+  .creator-card__inner { flex-direction: column; gap: 16px; padding: 20px; }
+}

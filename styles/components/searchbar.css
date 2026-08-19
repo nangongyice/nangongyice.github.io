@@ -1,0 +1,103 @@
+/* ============================================================
+   searchbar.css — 搜索输入
+   ============================================================ */
+
+.searchbar {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.searchbar__toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-circle);
+  color: var(--color-text-mute);
+  transition: background var(--dur-hover) var(--ease-out),
+              color var(--dur-hover) var(--ease-out);
+}
+.searchbar__toggle:hover {
+  background: var(--color-bg-mist);
+  color: var(--color-text-ink);
+}
+
+.searchbar__form {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%) translateX(8px);
+  display: flex;
+  align-items: center;
+  width: 0;
+  height: 40px;
+  padding: 0;
+  background: var(--color-bg-white);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-pill);
+  overflow: hidden;
+  opacity: 0;
+  pointer-events: none;
+  transition: width var(--dur-card) var(--ease-out),
+              opacity var(--dur-hover) var(--ease-out),
+              padding var(--dur-card) var(--ease-out);
+  box-shadow: var(--shadow-xs);
+}
+
+.searchbar.is-expanded .searchbar__form {
+  width: 320px;
+  padding: 0 8px 0 16px;
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.searchbar.is-expanded .searchbar__toggle {
+  color: var(--color-brand);
+}
+
+.searchbar__input {
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  font-size: var(--fs-body-sm);
+  background: transparent;
+  border: none;
+  outline: none;
+}
+
+.searchbar__input::placeholder {
+  color: var(--color-text-faint);
+}
+
+.searchbar__submit {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-circle);
+  color: var(--color-text-mute);
+  transition: background var(--dur-hover) var(--ease-out),
+              color var(--dur-hover) var(--ease-out);
+}
+.searchbar__submit:hover {
+  background: var(--color-bg-mist);
+  color: var(--color-brand);
+}
+
+@media (max-width: 768px) {
+  .searchbar.is-expanded .searchbar__form {
+    position: fixed;
+    top: 60px;
+    right: 0;
+    left: 0;
+    transform: none;
+    width: 100%;
+    height: 56px;
+    border-radius: 0;
+    border-left: 0;
+    border-right: 0;
+  }
+}

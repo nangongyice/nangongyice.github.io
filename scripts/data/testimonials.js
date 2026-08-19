@@ -1,0 +1,66 @@
+// ============================================================
+// testimonials.js — 6 条精选评价
+// ============================================================
+
+export const testimonials = [
+  {
+    id: 't01',
+    courseId: 'k01',
+    userName: '江屿',
+    userRole: 'B 端产品设计师',
+    userAvatarPrompt: 'warm friendly portrait of an Asian male in his 20s, cream background, soft smile, editorial',
+    content: '不是又一套组件库教程。林老师让我第一次意识到，设计系统的难点不在技术，而在治理。第二讲关于 Token 的拆解，我立刻就用到了团队周会上。',
+    rating: 5,
+    createdAt: '2026-08-08',
+  },
+  {
+    id: 't02',
+    courseId: 'k04',
+    userName: '许青禾',
+    userRole: '内容编辑',
+    userAvatarPrompt: 'warm friendly portrait of an Asian female in her 20s, cream background, soft smile, editorial',
+    content: '苏老师的写作课把我从"写得好"的执念里拉了出来，让我看见"写得对"才是开始。第五讲的修改示范，是真正可以反复看的素材。',
+    rating: 5,
+    createdAt: '2026-08-05',
+  },
+  {
+    id: 't03',
+    courseId: 'k05',
+    userName: '陆迟',
+    userRole: '自由摄影师',
+    userAvatarPrompt: 'warm friendly portrait of an Asian male in his 30s with beard, cream background, soft smile, editorial',
+    content: '何川老师讲的不是参数，是看见。第三讲对人像光线的情绪表达，我至少看了三遍，每一次都有新的体感。',
+    rating: 5,
+    createdAt: '2026-07-25',
+  },
+  {
+    id: 't04',
+    courseId: 'k06',
+    userName: '宋也',
+    userRole: '研究生',
+    userAvatarPrompt: 'warm friendly portrait of an Asian female in her 20s with glasses, cream background, soft smile, editorial',
+    content: '黎博士把认知心理学的研究讲得既严谨又温柔。第六讲帮我搭起了一套属于自己的注意力系统，第一次觉得"专注"是可以训练的。',
+    rating: 5,
+    createdAt: '2026-08-12',
+  },
+  {
+    id: 't05',
+    courseId: 'k09',
+    userName: '商陆',
+    userRole: '新消费品牌创始人',
+    userAvatarPrompt: 'warm friendly portrait of an Asian male in his 30s, cream background, soft smile, editorial',
+    content: '叶老师让我重新理解了"品牌"两个字。第一讲"品牌不是 Logo，是叙事"这一句，回去就改了我们的整轮 pitch。',
+    rating: 5,
+    createdAt: '2026-08-02',
+  },
+  {
+    id: 't06',
+    courseId: 'k10',
+    userName: '闻笛',
+    userRole: '创业者',
+    userAvatarPrompt: 'warm friendly portrait of an Asian female in her 30s, cream background, soft smile, editorial',
+    content: '夏老师的方法论温暖又锋利。第二讲关于紧张的真实反应，让我第一次不再害怕上台。讲完收到了 5 个合作意向。',
+    rating: 5,
+    createdAt: '2026-08-14',
+  },
+];

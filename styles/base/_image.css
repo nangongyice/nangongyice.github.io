@@ -1,0 +1,10 @@
+/* ============================================================
+   image.css — 图片懒加载兜底样式
+   ============================================================ */
+
+img[data-src] { opacity: 0; transition: opacity 400ms var(--ease-out); }
+img.img-loaded { opacity: 1; }
+img.img-fallback { opacity: 1; }
+
+/* 首屏 Hero 图专用 */
+.hero-banner img[data-src] { opacity: 1; }

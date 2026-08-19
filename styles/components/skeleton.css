@@ -1,0 +1,53 @@
+/* ============================================================
+   skeleton.css — 加载占位
+   ============================================================ */
+
+.skeleton {
+  display: block;
+  width: 100%;
+  height: 16px;
+  background: linear-gradient(90deg,
+    var(--color-bg-mist) 0%,
+    var(--color-border) 50%,
+    var(--color-bg-mist) 100%);
+  background-size: 200% 100%;
+  border-radius: var(--radius-xs);
+  animation: skeleton-shimmer 1.4s var(--ease-in-out) infinite;
+}
+
+@keyframes skeleton-shimmer {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* —— 变体 —— */
+.skeleton--rect { border-radius: var(--radius-sm); }
+.skeleton--card { border-radius: var(--radius-md); }
+.skeleton--circle {
+  border-radius: var(--radius-circle);
+  aspect-ratio: 1;
+  height: auto;
+}
+.skeleton--text {
+  height: 12px;
+  margin: 6px 0;
+  border-radius: var(--radius-xs);
+}
+
+/* 行内文本占位 */
+.skeleton-line {
+  display: block;
+  height: 14px;
+  margin: 8px 0;
+  background: linear-gradient(90deg,
+    var(--color-bg-mist) 0%,
+    var(--color-border) 50%,
+    var(--color-bg-mist) 100%);
+  background-size: 200% 100%;
+  border-radius: var(--radius-xs);
+  animation: skeleton-shimmer 1.4s var(--ease-in-out) infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skeleton, .skeleton-line { animation: none; }
+}

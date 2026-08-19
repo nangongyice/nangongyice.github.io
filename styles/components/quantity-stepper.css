@@ -1,0 +1,59 @@
+/* ============================================================
+   quantity-stepper.css — 数量步进器
+   ============================================================ */
+
+.qty-stepper {
+  display: inline-flex;
+  align-items: center;
+  background: var(--color-bg-mist);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+
+.qty-stepper__btn {
+  width: 36px;
+  height: 36px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  color: var(--color-text-mute);
+  font-family: var(--font-en);
+  font-size: var(--fs-body-lg);
+  font-weight: var(--fw-medium);
+  cursor: pointer;
+  transition: background var(--dur-hover) var(--ease-out),
+              color var(--dur-hover) var(--ease-out);
+  user-select: none;
+}
+
+.qty-stepper__btn:hover {
+  background: var(--color-bg-white);
+  color: var(--color-brand);
+}
+
+.qty-stepper__btn:active { transform: scale(0.96); }
+
+.qty-stepper__input {
+  width: 48px;
+  height: 36px;
+  text-align: center;
+  border: none;
+  background: transparent;
+  color: var(--color-text-ink);
+  font-family: var(--font-en);
+  font-size: var(--fs-body);
+  font-weight: var(--fw-semibold);
+  letter-spacing: -0.01em;
+  border-left: 1px solid var(--color-border);
+  border-right: 1px solid var(--color-border);
+}
+
+.qty-stepper__input:focus { outline: none; background: var(--color-bg-white); }
+
+@media (max-width: 768px) {
+  .qty-stepper__btn { width: 44px; height: 44px; }
+  .qty-stepper__input { height: 44px; }
+}

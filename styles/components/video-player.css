@@ -1,0 +1,27 @@
+/* ============================================================
+   video-player.css — 视频播放器（备用 / 当前由 learning.css 实现）
+   ============================================================ */
+
+.video-player {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  background: var(--color-bg-dark);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+.video-player__video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.video-player__placeholder {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #1F2D4A 0%, #1A1A1A 100%);
+  color: var(--color-text-inv);
+}

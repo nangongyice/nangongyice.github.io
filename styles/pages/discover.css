@@ -1,0 +1,198 @@
+/* ============================================================
+   discover.css — 发现 / 课程商城
+   ============================================================ */
+
+.discover-page {
+  padding-bottom: 80px;
+}
+
+/* —— Hero —— */
+.discover-hero {
+  padding: clamp(56px, 8vw, 96px) 0 clamp(32px, 4vw, 56px);
+  background: var(--gradient-warm);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.discover-hero .section__title {
+  margin-top: 8px;
+}
+
+/* —— 工具栏 —— */
+.discover-toolbar {
+  position: sticky;
+  top: var(--header-h, 72px);
+  z-index: 20;
+  padding: 16px 0;
+  background: rgba(250, 247, 241, 0.86);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.discover-toolbar__inner {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+.discover-toolbar__focus {
+  display: inline-flex;
+  gap: 4px;
+  padding: 4px;
+  background: var(--color-bg-mist);
+  border-radius: var(--radius-pill);
+}
+
+.discover-toolbar__focus-tab {
+  padding: 8px 18px;
+  border: none;
+  background: transparent;
+  color: var(--color-text-mute);
+  font-family: var(--font-cn);
+  font-size: var(--fs-body-sm);
+  font-weight: var(--fw-medium);
+  letter-spacing: var(--ls-wide);
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  transition: color var(--dur-hover) var(--ease-out),
+              background var(--dur-hover) var(--ease-out);
+}
+
+.discover-toolbar__focus-tab:hover {
+  color: var(--color-text-ink);
+}
+
+.discover-toolbar__focus-tab.is-active {
+  background: var(--color-bg-white);
+  color: var(--color-text-ink);
+  box-shadow: var(--shadow-xs);
+}
+
+.discover-toolbar__filters {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex: 1;
+  flex-wrap: wrap;
+  min-width: 0;
+}
+
+.discover-toolbar__cat {
+  padding: 6px 14px;
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--color-text-mute);
+  font-family: var(--font-cn);
+  font-size: var(--fs-body-sm);
+  font-weight: var(--fw-medium);
+  letter-spacing: var(--ls-wide);
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  transition: color var(--dur-hover) var(--ease-out),
+              background var(--dur-hover) var(--ease-out),
+              border-color var(--dur-hover) var(--ease-out);
+}
+
+.discover-toolbar__cat:hover {
+  color: var(--color-text-ink);
+  background: var(--color-bg-mist);
+}
+
+.discover-toolbar__cat.is-active {
+  color: var(--color-brand);
+  border-color: var(--color-brand);
+  background: var(--color-brand-soft);
+}
+
+.discover-toolbar__sort {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding-left: 16px;
+  border-left: 1px solid var(--color-border-strong);
+}
+
+.discover-toolbar__sort-label {
+  font-family: var(--font-en);
+  font-size: var(--fs-xs);
+  letter-spacing: var(--ls-wider);
+  text-transform: uppercase;
+  color: var(--color-text-faint);
+  margin-right: 4px;
+}
+
+.discover-toolbar__sort-btn {
+  padding: 6px 10px;
+  border: none;
+  background: transparent;
+  color: var(--color-text-mute);
+  font-family: var(--font-en);
+  font-size: var(--fs-body-sm);
+  font-weight: var(--fw-medium);
+  letter-spacing: var(--ls-wide);
+  border-radius: var(--radius-xs);
+  cursor: pointer;
+  transition: color var(--dur-hover) var(--ease-out),
+              background var(--dur-hover) var(--ease-out);
+}
+
+.discover-toolbar__sort-btn:hover { color: var(--color-text-ink); }
+.discover-toolbar__sort-btn.is-active {
+  color: var(--color-text-ink);
+  background: var(--color-bg-mist);
+}
+
+/* —— 内容区 —— */
+.discover-content {
+  padding: clamp(32px, 4vw, 56px) 0 0;
+}
+
+.discover-content__count {
+  font-family: var(--font-en);
+  font-size: var(--fs-xs);
+  letter-spacing: var(--ls-wider);
+  text-transform: uppercase;
+  color: var(--color-text-faint);
+  margin-bottom: 24px;
+}
+
+.discover-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 28px 24px;
+}
+
+.discover-creators {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+}
+
+/* —— 响应式 —— */
+@media (max-width: 1024px) {
+  .discover-grid { grid-template-columns: repeat(2, 1fr); }
+  .discover-toolbar__inner { gap: 16px; }
+}
+
+@media (max-width: 768px) {
+  .discover-toolbar { position: static; padding: 12px 0; }
+  .discover-toolbar__inner { flex-direction: column; align-items: stretch; gap: 12px; }
+  .discover-toolbar__filters { justify-content: flex-start; }
+  .discover-toolbar__sort {
+    padding-left: 0;
+    border-left: none;
+    justify-content: flex-start;
+  }
+  .discover-creators { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 600px) {
+  .discover-grid { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 768px) {
+  .discover-toolbar__focus-tab,
+  .discover-toolbar__cat,
+  .discover-toolbar__sort-btn { min-height: 44px; }
+}

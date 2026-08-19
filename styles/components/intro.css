@@ -1,0 +1,174 @@
+/* ============================================================
+   intro.css — 首屏品牌入场动画（S2）
+   ============================================================ */
+
+.intro-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-bg-cream);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 300ms var(--ease-out),
+              visibility 300ms var(--ease-out),
+              transform 700ms var(--ease-page);
+  transform-origin: top;
+  overflow: hidden;
+}
+
+.intro-overlay.is-visible {
+  opacity: 1;
+  visibility: visible;
+}
+
+.intro-overlay.is-leaving {
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-100%);
+  transition: opacity 500ms var(--ease-out),
+              visibility 500ms var(--ease-out),
+              transform 700ms var(--ease-page);
+}
+
+.intro-overlay__inner {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  padding: 24px;
+  text-align: center;
+}
+
+/* —— 翻页装饰 —— */
+.intro-overlay__pages {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+.intro-overlay__pages span {
+  display: block;
+  width: 18px;
+  height: 4px;
+  background: var(--color-brand);
+  border-radius: 2px;
+  opacity: 0;
+  transform: scaleX(0);
+  transform-origin: left;
+}
+
+.intro-overlay.is-visible .intro-overlay__pages span {
+  animation: intro-page-bar 600ms var(--ease-out) forwards;
+}
+
+.intro-overlay.is-visible .intro-overlay__pages span:nth-child(1) { animation-delay: 80ms; }
+.intro-overlay.is-visible .intro-overlay__pages span:nth-child(2) { animation-delay: 200ms; }
+.intro-overlay.is-visible .intro-overlay__pages span:nth-child(3) { animation-delay: 320ms; }
+
+@keyframes intro-page-bar {
+  0% { opacity: 0; transform: scaleX(0); }
+  60% { opacity: 1; transform: scaleX(1.1); }
+  100% { opacity: 1; transform: scaleX(1); }
+}
+
+/* —— 品牌文字 —— */
+.intro-overlay__brand {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.intro-overlay__brand-en {
+  font-family: var(--font-brand);
+  font-size: clamp(48px, 8vw, 96px);
+  font-weight: var(--fw-bold);
+  line-height: 1;
+  letter-spacing: -0.04em;
+  color: var(--color-text-ink);
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.intro-overlay__brand-cn {
+  font-family: var(--font-cn);
+  font-size: clamp(20px, 3vw, 28px);
+  font-weight: var(--fw-medium);
+  letter-spacing: var(--ls-wider);
+  color: var(--color-brand);
+  opacity: 0;
+  transform: translateY(12px);
+}
+
+.intro-overlay.is-visible .intro-overlay__brand-en {
+  animation: intro-en-in 800ms var(--ease-out) 280ms forwards;
+}
+
+.intro-overlay.is-visible .intro-overlay__brand-cn {
+  animation: intro-cn-in 600ms var(--ease-out) 620ms forwards;
+}
+
+@keyframes intro-en-in {
+  0% { opacity: 0; transform: translateY(20px); letter-spacing: 0.1em; }
+  60% { opacity: 1; }
+  100% { opacity: 1; transform: translateY(0); letter-spacing: -0.04em; }
+}
+
+@keyframes intro-cn-in {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* —— Tagline —— */
+.intro-overlay__tagline {
+  font-family: var(--font-cn);
+  font-size: var(--fs-body-sm);
+  color: var(--color-text-mute);
+  letter-spacing: var(--ls-wide);
+  opacity: 0;
+}
+
+.intro-overlay.is-visible .intro-overlay__tagline {
+  animation: intro-tagline-in 600ms var(--ease-out) 920ms forwards;
+}
+
+@keyframes intro-tagline-in {
+  0% { opacity: 0; transform: translateY(8px); }
+  100% { opacity: 0.85; transform: translateY(0); }
+}
+
+/* —— 首屏期间隐藏主体 —— */
+body.is-intro #view,
+body.is-intro #site-header,
+body.is-intro #site-footer {
+  opacity: 0;
+  transition: opacity 400ms var(--ease-out);
+}
+
+body.is-intro #site-header {
+  opacity: 0;
+  transform: translateY(-12px);
+  transition: opacity 600ms var(--ease-out) 1.2s,
+              transform 600ms var(--ease-out) 1.2s;
+}
+
+/* intro 收尾后 header 浮入 */
+.intro-overlay.is-leaving ~ #site-header,
+.intro-overlay.is-leaving + #site-header {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* 直接的 body 解锁（兜底，靠 main.js 加 is-intro-done） */
+body.is-intro-done #site-header {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* —— 移动端微缩 —— */
+@media (max-width: 600px) {
+  .intro-overlay__tagline { font-size: var(--fs-xs); }
+}
