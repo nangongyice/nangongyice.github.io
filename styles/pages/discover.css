@@ -22,7 +22,12 @@
   position: relative;
   min-height: 420px;
   transform-style: preserve-3d;
+  cursor: grab;
+  touch-action: pan-y; /* 允许垂直滚动，水平拖拽由我们处理 */
+  -webkit-touch-callout: none;
 }
+
+.discover-hero__viewport.is-dragging { cursor: grabbing; }
 
 /* —— 单张 slide：3D 翻页状态 —— */
 .discover-hero__slide {
@@ -32,7 +37,7 @@
   align-items: center;
   opacity: 0;
   transform: rotateY(90deg);
-  transform-origin: left center;
+  transform-origin: var(--flip-origin, left) center;
   backface-visibility: hidden;
   transition: transform 1000ms var(--ease-banner),
               opacity 1000ms var(--ease-banner);
@@ -52,6 +57,60 @@
   transform: rotateY(-90deg);
   z-index: 1;
 }
+
+/* —— 拖拽中的 slide：纸张质感 + 边缘阴影 —— */
+.discover-hero__viewport.is-dragging {
+  cursor: grabbing;
+  user-select: none;
+}
+.discover-hero__viewport.is-dragging .discover-hero__slide {
+  transition: none; /* 拖拽时禁用 transition，由 JS 实时设 transform */
+}
+.discover-hero__slide.is-dragging-active,
+.discover-hero__slide.is-dragging-target {
+  pointer-events: none;
+}
+/* 拖拽中的当前页：边缘阴影模拟纸张厚度，背面暖色渐变模拟纸张 */
+.discover-hero__slide.is-dragging-active::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  background:
+    linear-gradient(90deg, rgba(250, 247, 241, 0.95) 0%, rgba(245, 235, 220, 0.7) 40%, rgba(232, 85, 43, 0.04) 100%),
+    linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(26, 26, 26, 0.12) 100%);
+  box-shadow:
+    0 0 0 1px rgba(232, 85, 43, 0.08) inset,
+    0 12px 32px rgba(26, 26, 26, 0.18),
+    0 2px 8px rgba(26, 26, 26, 0.12);
+  opacity: 0.9;
+  pointer-events: none;
+  backface-visibility: hidden;
+}
+/* 目标页（正在进入的页）：背面带光感 */
+.discover-hero__slide.is-dragging-target::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  background: linear-gradient(270deg, rgba(250, 247, 241, 0.6) 0%, transparent 60%);
+  pointer-events: none;
+  backface-visibility: hidden;
+}
+/* 翻起的纸角高光（拖拽中页面的折起边缘） */
+.discover-hero__slide.is-dragging-active::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 40px;
+  z-index: 6;
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.6) 0%, transparent 100%);
+  pointer-events: none;
+  filter: blur(1px);
+}
+.discover-hero__slide.is-dragging-active[data-flip-dir="next"]::before { right: 0; }
+.discover-hero__slide.is-dragging-active[data-flip-dir="prev"]::before { left: 0; background: linear-gradient(270deg, rgba(255, 255, 255, 0.6) 0%, transparent 100%); }
 
 .discover-hero__bg {
   position: absolute;

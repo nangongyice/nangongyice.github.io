@@ -97,6 +97,9 @@ export default {
 
   unmount() {
     this._stopHeroAutoplay();
+    if (this._onPointerDown && this._heroViewport) this._heroViewport.removeEventListener('pointerdown', this._onPointerDown);
+    if (this._onPointerMove) window.removeEventListener('pointermove', this._onPointerMove);
+    if (this._onPointerUp) { window.removeEventListener('pointerup', this._onPointerUp); window.removeEventListener('pointercancel', this._onPointerUp); }
     this._components?.forEach(c => c?.unmount?.());
     this._components = [];
   },
@@ -125,14 +128,156 @@ export default {
     qs('[data-role="hero-prev"]', root)?.addEventListener('click', () => this._goHero(this._heroActive - 1));
     qs('[data-role="hero-next"]', root)?.addEventListener('click', () => this._goHero(this._heroActive + 1));
 
-    // 鼠标进入暂停
+    // 鼠标进入暂停自动播放
     const hero = qs('.discover-hero', root);
     if (hero) {
-      hero.addEventListener('mouseenter', () => this._stopHeroAutoplay());
-      hero.addEventListener('mouseleave', () => this._startHeroAutoplay());
+      hero.addEventListener('mouseenter', () => { this._isHovering = true; if (!this._isDragging) this._stopHeroAutoplay(); });
+      hero.addEventListener('mouseleave', () => { this._isHovering = false; if (!this._isDragging) this._startHeroAutoplay(); });
+    }
+
+    // —— 拖拽翻页（Pointer Events 统一鼠标/触摸） ——
+    if (this._heroViewport && !this._reduceMotion) {
+      this._onPointerDown = (e) => this._handleDragStart(e);
+      this._onPointerMove = (e) => this._handleDragMove(e);
+      this._onPointerUp = (e) => this._handleDragEnd(e);
+      this._heroViewport.addEventListener('pointerdown', this._onPointerDown);
+      // move/up 绑在 window 上，确保拖出 viewport 也能继续
+      window.addEventListener('pointermove', this._onPointerMove);
+      window.addEventListener('pointerup', this._onPointerUp);
+      window.addEventListener('pointercancel', this._onPointerUp);
     }
 
     if (!this._reduceMotion) this._startHeroAutoplay();
+  },
+
+  // ============ 拖拽翻页逻辑 ============
+
+  _handleDragStart(e) {
+    // 仅主键（左键/触摸）触发；忽略对 chrome 控件（dots/箭头）的点击
+    if (e.button !== undefined && e.button !== 0) return;
+    if (e.target.closest('.discover-hero__chrome, [data-role="hero-dot"], [data-role="hero-prev"], [data-role="hero-next"]')) return;
+
+    this._isDragging = true;
+    this._dragStartX = e.clientX;
+    this._dragDir = null; // 'next' | 'prev'，待首次 move 判定
+    this._dragTargetIdx = null;
+    this._stopHeroAutoplay();
+    this._heroViewport.classList.add('is-dragging');
+    try { this._heroViewport.setPointerCapture(e.pointerId); } catch {}
+  },
+
+  _handleDragMove(e) {
+    if (!this._isDragging) return;
+    const dx = e.clientX - this._dragStartX;
+    const vw = this._heroViewport.offsetWidth || 1;
+    const ratio = dx / vw; // -1..1
+
+    // 首次移动判定方向（>8px 阈值）
+    if (!this._dragDir && Math.abs(dx) > 8) {
+      this._dragDir = dx < 0 ? 'next' : 'prev';
+      const total = HERO_SLIDES.length;
+      this._dragTargetIdx = (this._dragDir === 'next')
+        ? (this._heroActive + 1) % total
+        : (this._heroActive - 1 + total) % total;
+      // 设置翻转轴：往左翻用 left（页面往左倒），往右翻用 right
+      const origin = this._dragDir === 'next' ? 'left' : 'right';
+      this._heroViewport.style.setProperty('--flip-origin', origin);
+      // 标记当前页和目标页
+      const cur = this._heroSlides[this._heroActive];
+      const tgt = this._heroSlides[this._dragTargetIdx];
+      cur.classList.add('is-dragging-active');
+      cur.setAttribute('data-flip-dir', this._dragDir);
+      tgt.classList.add('is-dragging-target');
+      // 让目标页进入待命态（从对应方向 90/-90 立着）
+      const initialAngle = this._dragDir === 'next' ? 90 : -90;
+      tgt.style.transition = 'none';
+      tgt.style.opacity = '0';
+      tgt.style.transform = `rotateY(${initialAngle}deg)`;
+    }
+
+    if (!this._dragDir) return;
+
+    const progress = Math.max(0, Math.min(1, Math.abs(ratio)));
+    const angle = progress * 90;
+    const cur = this._heroSlides[this._heroActive];
+    const tgt = this._heroSlides[this._dragTargetIdx];
+
+    if (this._dragDir === 'next') {
+      // 当前页从 0 往 -90 倒，下一页从 90 往 0 立
+      cur.style.transform = `rotateY(${-angle}deg)`;
+      tgt.style.transform = `rotateY(${90 - angle}deg)`;
+    } else {
+      // 当前页从 0 往 90 倒（origin: right），上一页从 -90 往 0 立
+      cur.style.transform = `rotateY(${angle}deg)`;
+      tgt.style.transform = `rotateY(${-90 + angle}deg)`;
+    }
+    cur.style.opacity = String(1 - progress * 0.3);
+    tgt.style.opacity = String(progress);
+  },
+
+  _handleDragEnd(e) {
+    if (!this._isDragging) return;
+    this._isDragging = false;
+    const vw = this._heroViewport.offsetWidth || 1;
+    const dx = e.clientX - this._dragStartX;
+    const ratio = dx / vw;
+    const threshold = 0.18; // 拖拽超过 18% 视口宽度即翻页
+    const shouldFlip = Math.abs(ratio) > threshold;
+    const dir = this._dragDir || (ratio < 0 ? 'next' : 'prev');
+    const total = HERO_SLIDES.length;
+    const targetIdx = shouldFlip
+      ? (dir === 'next' ? (this._heroActive + 1) % total : (this._heroActive - 1 + total) % total)
+      : this._heroActive;
+
+    const cur = this._heroSlides[this._heroActive];
+    const tgt = this._heroSlides[(dir === 'next' ? (this._heroActive + 1) % total : (this._heroActive - 1 + total) % total)];
+    // 恢复 transition
+    [cur, tgt].forEach(el => { if (el) el.style.transition = ''; });
+
+    if (shouldFlip) {
+      // 完成翻页：当前页倒到 ±90，目标页立到 0
+      cur.style.transform = `rotateY(${dir === 'next' ? -90 : 90}deg)`;
+      cur.style.opacity = '0';
+      tgt.style.transform = 'rotateY(0deg)';
+      tgt.style.opacity = '1';
+      // 动画结束后清理 + 切换 active 状态
+      const onEnd = () => {
+        cur.classList.remove('is-dragging-active', 'is-active');
+        cur.removeAttribute('data-flip-dir');
+        cur.style.transform = '';
+        cur.style.opacity = '';
+        tgt.classList.remove('is-dragging-target');
+        tgt.classList.add('is-active');
+        tgt.style.transform = '';
+        tgt.style.opacity = '';
+        this._heroViewport.style.removeProperty('--flip-origin');
+        this._heroViewport.classList.remove('is-dragging');
+        this._heroActive = targetIdx;
+        this._onHeroChanged();
+        // 拖拽完不立即恢复 autoplay，等鼠标离开或延迟
+        setTimeout(() => { if (!this._isHovering) this._startHeroAutoplay(); }, 1500);
+      };
+      setTimeout(onEnd, 500);
+    } else {
+      // 回弹：当前页回到 0，目标页回到 ±90 + opacity 0
+      cur.style.transform = 'rotateY(0deg)';
+      cur.style.opacity = '1';
+      tgt.style.transform = `rotateY(${dir === 'next' ? 90 : -90}deg)`;
+      tgt.style.opacity = '0';
+      const onEnd = () => {
+        cur.classList.remove('is-dragging-active');
+        cur.removeAttribute('data-flip-dir');
+        cur.style.transform = '';
+        cur.style.opacity = '';
+        tgt.classList.remove('is-dragging-target');
+        tgt.style.transform = '';
+        tgt.style.opacity = '';
+        this._heroViewport.style.removeProperty('--flip-origin');
+        this._heroViewport.classList.remove('is-dragging');
+        setTimeout(() => { if (!this._isHovering) this._startHeroAutoplay(); }, 1500);
+      };
+      setTimeout(onEnd, 500);
+    }
   },
 
   _startHeroAutoplay() {
