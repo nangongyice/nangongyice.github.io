@@ -186,7 +186,7 @@ export default {
     const cnEl = newSlide?.querySelector('[data-component="chapter-number"]');
     if (cnEl) {
       cnEl.dataset.index = chIdx;
-      cnEl.dataset.total = total = HERO_SLIDES.length;
+      cnEl.dataset.total = HERO_SLIDES.length;
       cnEl.dataset.label = label;
     }
   },
