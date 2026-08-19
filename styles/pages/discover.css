@@ -6,13 +6,195 @@
   padding-bottom: 80px;
 }
 
-/* —— Hero —— */
+/* —— Hero 轮播容器 —— */
 .discover-hero {
-  padding: clamp(56px, 8vw, 96px) 0 clamp(32px, 4vw, 56px);
+  position: relative;
+  padding: 0;
   background: var(--gradient-warm);
   border-bottom: 1px solid var(--color-border);
+  overflow: hidden;
+  perspective: 1400px;
+  perspective-origin: center center;
+  min-height: 420px;
 }
 
+.discover-hero__viewport {
+  position: relative;
+  min-height: 420px;
+  transform-style: preserve-3d;
+}
+
+/* —— 单张 slide：3D 翻页状态 —— */
+.discover-hero__slide {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  opacity: 0;
+  transform: rotateY(90deg);
+  transform-origin: left center;
+  backface-visibility: hidden;
+  transition: transform 1000ms var(--ease-banner),
+              opacity 1000ms var(--ease-banner);
+  pointer-events: none;
+  will-change: transform, opacity;
+}
+
+.discover-hero__slide.is-active {
+  opacity: 1;
+  transform: rotateY(0deg);
+  pointer-events: auto;
+  z-index: 2;
+}
+
+.discover-hero__slide.is-outgoing {
+  opacity: 0;
+  transform: rotateY(-90deg);
+  z-index: 1;
+}
+
+.discover-hero__bg {
+  position: absolute;
+  inset: -12%;
+  z-index: 1;
+  background:
+    radial-gradient(ellipse 70% 60% at 70% 40%, var(--color-brand-soft), transparent 70%),
+    radial-gradient(ellipse 50% 40% at 20% 80%, rgba(232, 85, 43, 0.12), transparent 60%);
+  will-change: transform;
+}
+
+.discover-hero__slide[data-tag="creators"] .discover-hero__bg {
+  background:
+    radial-gradient(ellipse 65% 55% at 30% 30%, rgba(46, 100, 84, 0.18), transparent 70%),
+    radial-gradient(ellipse 40% 35% at 80% 70%, rgba(46, 100, 84, 0.08), transparent 60%);
+}
+
+.discover-hero__slide[data-tag="philosophy"] .discover-hero__bg {
+  background:
+    radial-gradient(ellipse 60% 50% at 50% 50%, rgba(217, 119, 6, 0.14), transparent 70%),
+    radial-gradient(ellipse 45% 35% at 80% 30%, rgba(217, 119, 6, 0.08), transparent 60%);
+}
+
+/* —— 内容层 —— */
+.discover-hero__content {
+  position: relative;
+  z-index: 2;
+  padding: clamp(56px, 8vw, 96px) 0 clamp(64px, 6vw, 96px);
+}
+
+.discover-hero__header {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-width: 640px;
+}
+
+.discover-hero__title {
+  font-family: var(--font-cn);
+  font-size: clamp(36px, 5vw, 64px);
+  font-weight: var(--fw-semibold);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  margin: 0;
+  color: var(--color-text-ink);
+}
+
+.discover-hero__desc {
+  font-size: var(--fs-body);
+  line-height: var(--lh-relaxed);
+  color: var(--color-text-mute);
+  max-width: 520px;
+  margin: 8px 0 0;
+}
+
+/* —— Chrome 控制层 —— */
+.discover-hero__chrome {
+  position: absolute;
+  bottom: 24px;
+  left: 0;
+  right: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-inline: var(--container-pad);
+  pointer-events: none;
+}
+
+.discover-hero__nav {
+  display: inline-flex;
+  gap: 8px;
+  pointer-events: auto;
+}
+
+.discover-hero__arrow {
+  width: 36px;
+  height: 36px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--color-border-strong);
+  background: var(--color-bg-white);
+  color: var(--color-text-ink);
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background var(--dur-hover) var(--ease-out),
+              transform var(--dur-hover) var(--ease-out),
+              border-color var(--dur-hover) var(--ease-out);
+}
+
+.discover-hero__arrow:hover {
+  background: var(--color-bg-mist);
+  border-color: var(--color-text-ink);
+  transform: scale(1.05);
+}
+
+.discover-hero__arrow:active { transform: scale(0.95); }
+
+.discover-hero__dots {
+  display: inline-flex;
+  gap: 10px;
+  pointer-events: auto;
+}
+
+.discover-hero__dot {
+  width: 36px;
+  height: 4px;
+  border-radius: var(--radius-pill);
+  background: var(--color-border-strong);
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  transition: background var(--dur-hover) var(--ease-out),
+              width var(--dur-card) var(--ease-out);
+}
+
+.discover-hero__dot.is-active {
+  background: var(--color-brand);
+  width: 56px;
+}
+
+.discover-hero__counter {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 4px;
+  font-family: var(--font-brand);
+  color: var(--color-text-faint);
+  font-size: 14px;
+  letter-spacing: 0.04em;
+  pointer-events: auto;
+}
+
+.discover-hero__counter-current {
+  color: var(--color-text-ink);
+  font-size: 18px;
+  font-weight: var(--fw-semibold);
+}
+
+.discover-hero__counter-sep { color: var(--color-border-strong); }
+.discover-hero__counter-total { color: var(--color-border-strong); }
+
+/* —— Hero 已迁移到轮播，保留旧 hero 样式中的 title 兼容（不再用） —— */
 .discover-hero .section__title {
   margin-top: 8px;
 }
@@ -185,6 +367,27 @@
     justify-content: flex-start;
   }
   .discover-creators { grid-template-columns: 1fr; }
+
+  /* Hero 轮播移动端降级 */
+  .discover-hero {
+    min-height: 360px;
+    perspective: none;
+  }
+  .discover-hero__slide {
+    transform: translateX(100%);
+    transform-origin: center;
+    transition: transform var(--dur-banner) var(--ease-banner),
+                opacity var(--dur-banner) var(--ease-banner);
+  }
+  .discover-hero__slide.is-active { transform: translateX(0); }
+  .discover-hero__slide.is-outgoing { transform: translateX(-100%); }
+  .discover-hero__content { padding: clamp(40px, 6vw, 64px) 0 clamp(56px, 5vw, 72px); }
+  .discover-hero__title { font-size: clamp(28px, 7vw, 40px); }
+  .discover-hero__desc { font-size: 15px; }
+  .discover-hero__chrome { bottom: 16px; padding-inline: 20px; }
+  .discover-hero__arrow { width: 32px; height: 32px; }
+  .discover-hero__dot { width: 24px; }
+  .discover-hero__dot.is-active { width: 40px; }
 }
 
 @media (max-width: 600px) {
@@ -195,4 +398,14 @@
   .discover-toolbar__focus-tab,
   .discover-toolbar__cat,
   .discover-toolbar__sort-btn { min-height: 44px; }
+}
+
+/* —— reduced-motion 降级：跳过 3D 翻页 —— */
+@media (prefers-reduced-motion: reduce) {
+  .discover-hero__slide,
+  .discover-hero__slide.is-active,
+  .discover-hero__slide.is-outgoing {
+    transition: opacity 300ms ease;
+    transform: none;
+  }
 }

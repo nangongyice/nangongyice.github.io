@@ -1,6 +1,6 @@
 // ============================================================
 // discover.js — 发现 / 课程商城
-// 含：分类 Tabs / 排序 / 课程网格 / 分页 / 空状态 / 创作者区
+// 含：3D 翻页 Hero 轮播 / 分类 Tabs / 排序 / 课程网格 / 分页 / 空状态 / 创作者区
 // ============================================================
 
 import { api } from '../core/api.js';
@@ -11,9 +11,41 @@ import { imageUrl, setImageLazy } from '../core/image.js';
 import { formatPrice, formatLearnerCount, formatDuration } from '../core/format.js';
 import { ChapterNumber } from '../components/ChapterNumber.js';
 import { Avatar } from '../components/Avatar.js';
+import { prefersReducedMotion } from '../core/animation.js';
 import { courseMap, creatorMap } from '../data/index.js';
 
 const PAGE_SIZE = 9;
+
+// Hero 轮播的 3 页内容
+const HERO_SLIDES = [
+  {
+    eyebrow: 'DISCOVER · 发现',
+    chapterIndex: 1,
+    chapterLabel: 'Discover',
+    title: '不必通读所有书，\n但该读对的那一本',
+    desc: '在 14 门由领域创作者亲述的课程中，找到属于你下一阶段的那一页。',
+    tag: 'explore',
+  },
+  {
+    eyebrow: 'CURATORS · 创作者',
+    chapterIndex: 2,
+    chapterLabel: 'Curators',
+    title: '每一门课，\n都是一位创作者的思考结晶',
+    desc: '8 位来自设计、工程、写作、心理等领域的资深从业者，把他们多年的经验浓缩成可翻阅的章节。',
+    tag: 'creators',
+  },
+  {
+    eyebrow: 'PHILOSOPHY · 理念',
+    chapterIndex: 3,
+    chapterLabel: 'Philosophy',
+    title: '学习不是填满杯子，\n而是点燃火焰',
+    desc: '每一次翻页都是一次重新出发——你读到的不只是知识，更是他人走过的路。',
+    tag: 'philosophy',
+  },
+];
+
+const HERO_AUTOPLAY_MS = 5000;
+const HERO_TRANSITION_MS = 1000;
 
 export default {
   path: '/discover',
@@ -34,6 +66,9 @@ export default {
     this._categories = categories;
     this._creators = creators;
     this._components = [];
+    this._heroActive = 0;
+    this._heroTimer = null;
+    this._reduceMotion = prefersReducedMotion();
     this._state = {
       categoryId: query.categoryId || null,
       sort: 'recommended',
@@ -48,16 +83,8 @@ export default {
     // 注入分类 tabs
     this._injectCategoryTabs();
 
-    // 初始化章节编号
-    qsa('[data-component="chapter-number"]', root).forEach(el => {
-      const cn = new ChapterNumber({
-        index: parseInt(el.dataset.index, 10),
-        total: 3,
-        label: el.dataset.label,
-      });
-      cn.mount(el);
-      this._components.push(cn);
-    });
+    // 初始化章节编号（轮播内每页的编号在切换时动态挂载）
+    this._initHeroCarousel();
 
     // 绑定事件
     this._bindEvents(root);
@@ -69,21 +96,145 @@ export default {
   },
 
   unmount() {
+    this._stopHeroAutoplay();
     this._components?.forEach(c => c?.unmount?.());
     this._components = [];
+  },
+
+  // ============ 3D 翻页 Hero 轮播 ============
+
+  _initHeroCarousel() {
+    const root = this._root;
+    this._heroViewport = qs('.discover-hero__viewport', root);
+    this._heroChrome = qs('.discover-hero__chrome', root);
+    this._heroCounter = qs('[data-role="hero-counter-current"]', root);
+    this._heroSlides = qsa('.discover-hero__slide', root);
+
+    // 初始化当前活动 slide 的章节编号
+    this._mountChapterNumber(this._heroActive);
+
+    // 绑定 dots
+    qsa('[data-role="hero-dot"]', root).forEach(dot => {
+      dot.addEventListener('click', () => {
+        const idx = parseInt(dot.dataset.index, 10);
+        this._goHero(idx);
+      });
+    });
+
+    // 绑定左右箭头
+    qs('[data-role="hero-prev"]', root)?.addEventListener('click', () => this._goHero(this._heroActive - 1));
+    qs('[data-role="hero-next"]', root)?.addEventListener('click', () => this._goHero(this._heroActive + 1));
+
+    // 鼠标进入暂停
+    const hero = qs('.discover-hero', root);
+    if (hero) {
+      hero.addEventListener('mouseenter', () => this._stopHeroAutoplay());
+      hero.addEventListener('mouseleave', () => this._startHeroAutoplay());
+    }
+
+    if (!this._reduceMotion) this._startHeroAutoplay();
+  },
+
+  _startHeroAutoplay() {
+    this._stopHeroAutoplay();
+    this._heroTimer = setInterval(() => {
+      this._goHero(this._heroActive + 1);
+    }, HERO_AUTOPLAY_MS);
+  },
+
+  _stopHeroAutoplay() {
+    if (this._heroTimer) { clearInterval(this._heroTimer); this._heroTimer = null; }
+  },
+
+  _goHero(targetIndex) {
+    const total = HERO_SLIDES.length;
+    const idx = ((targetIndex % total) + total) % total;
+    if (idx === this._heroActive) return;
+    if (this._reduceMotion) {
+      // 降级：即时切换
+      this._heroSlides.forEach((s, i) => {
+        s.classList.toggle('is-active', i === idx);
+      });
+      this._heroActive = idx;
+      this._onHeroChanged();
+      return;
+    }
+    const oldEl = this._heroSlides[this._heroActive];
+    const newEl = this._heroSlides[idx];
+    oldEl.classList.remove('is-active');
+    oldEl.classList.add('is-outgoing');
+    newEl.classList.remove('is-outgoing');
+    newEl.classList.add('is-active');
+    setTimeout(() => oldEl.classList.remove('is-outgoing'), HERO_TRANSITION_MS + 50);
+    this._heroActive = idx;
+    this._onHeroChanged();
+  },
+
+  _onHeroChanged() {
+    // 更新 dots
+    qsa('[data-role="hero-dot"]', this._root).forEach((d, i) => {
+      d.classList.toggle('is-active', i === this._heroActive);
+    });
+    // 更新 counter
+    if (this._heroCounter) this._heroCounter.textContent = String(this._heroActive + 1).padStart(2, '0');
+    // 重新挂载章节编号
+    this._mountChapterNumber(this._heroActive);
+    // 更新章节数字文本（01/03 等）
+    const newSlide = this._heroSlides[this._heroActive];
+    const label = newSlide?.dataset.label || '';
+    const chIdx = newSlide?.dataset.chapterIndex || (this._heroActive + 1);
+    const cnEl = newSlide?.querySelector('[data-component="chapter-number"]');
+    if (cnEl) {
+      cnEl.dataset.index = chIdx;
+      cnEl.dataset.total = total = HERO_SLIDES.length;
+      cnEl.dataset.label = label;
+    }
+  },
+
+  _mountChapterNumber(index) {
+    // 先清理旧的
+    this._components.forEach(c => {
+      if (c instanceof ChapterNumber) c.unmount();
+    });
+    this._components = this._components.filter(c => !(c instanceof ChapterNumber));
+    // 只在当前活动 slide 挂载
+    const activeSlide = this._heroSlides[index];
+    if (!activeSlide) return;
+    const cnEl = activeSlide.querySelector('[data-component="chapter-number"]');
+    if (!cnEl) return;
+    const cn = new ChapterNumber({
+      index: parseInt(cnEl.dataset.index, 10),
+      total: parseInt(cnEl.dataset.total, 10),
+      label: cnEl.dataset.label,
+    });
+    cn.mount(cnEl);
+    this._components.push(cn);
   },
 
   _renderShell() {
     return `
       <section class="discover-page">
-        <div class="discover-hero section">
-          <div class="container">
-            <header class="section__header" data-reveal>
-              <span class="section__eyebrow">DISCOVER · 发现</span>
-              <div data-component="chapter-number" data-index="1" data-total="3" data-label="Discover"></div>
-              <h1 class="section__title">不必通读所有书，<br/>但该读对的那一本</h1>
-              <p class="section__desc">在 ${this._all.length} 门由领域创作者亲述的课程中，找到属于你下一阶段的那一页。</p>
-            </header>
+        <div class="discover-hero">
+          <div class="discover-hero__viewport" data-role="hero-viewport">
+            ${HERO_SLIDES.map((s, i) => this._heroSlideHTML(s, i)).join('')}
+          </div>
+          <div class="discover-hero__chrome" data-role="hero-chrome">
+            <div class="discover-hero__nav">
+              <button class="discover-hero__arrow" data-role="hero-prev" aria-label="上一页">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+              </button>
+              <button class="discover-hero__arrow" data-role="hero-next" aria-label="下一页">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+              </button>
+            </div>
+            <div class="discover-hero__dots">
+              ${HERO_SLIDES.map((_, i) => `<button class="discover-hero__dot${i === 0 ? ' is-active' : ''}" data-role="hero-dot" data-index="${i}" aria-label="翻到第 ${i + 1} 页"></button>`).join('')}
+            </div>
+            <div class="discover-hero__counter">
+              <span class="discover-hero__counter-current" data-role="hero-counter-current">01</span>
+              <span class="discover-hero__counter-sep">/</span>
+              <span class="discover-hero__counter-total">0${HERO_SLIDES.length}</span>
+            </div>
           </div>
         </div>
 
@@ -108,6 +259,21 @@ export default {
 
         <div class="discover-content section" data-role="content"></div>
       </section>`;
+  },
+
+  _heroSlideHTML(s, i) {
+    return `
+      <article class="discover-hero__slide${i === 0 ? ' is-active' : ''}" data-role="hero-slide" data-tag="${s.tag}" data-chapter-index="${s.chapterIndex}" data-label="${s.chapterLabel}">
+        <div class="discover-hero__bg" aria-hidden="true"></div>
+        <div class="container discover-hero__content">
+          <header class="discover-hero__header">
+            <span class="section__eyebrow">${s.eyebrow}</span>
+            <div data-component="chapter-number" data-index="${s.chapterIndex}" data-total="${HERO_SLIDES.length}" data-label="${s.chapterLabel}"></div>
+            <h1 class="discover-hero__title">${s.title.replace(/\n/g, '<br/>')}</h1>
+            <p class="discover-hero__desc">${s.desc}</p>
+          </header>
+        </div>
+      </article>`;
   },
 
   _injectCategoryTabs() {
