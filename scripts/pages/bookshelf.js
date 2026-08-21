@@ -138,17 +138,26 @@ export default {
     const purchased = state.purchases.map(id => courseMap[id]).filter(Boolean);
     const favorites = state.favorites.map(id => courseMap[id]).filter(Boolean);
 
-    // 更新 tab 计数
-    const readingCount = purchased.filter(c => state.progress[c.id] && state.progress[c.id].percent > 0).length;
-    this._setCount('count-reading', readingCount);
+    // 更新 tab 计数（正在阅读 = 所有已购课程，含未开始的）
+    this._setCount('count-reading', purchased.length);
     this._setCount('count-all', purchased.length);
     this._setCount('count-favorites', favorites.length);
 
     let list;
     if (this._state.tab === 'reading') {
+      // 正在阅读：所有已购课程，有进度的排前面，未开始的排后面
       list = purchased
-        .filter(c => state.progress[c.id] && state.progress[c.id].percent > 0)
-        .sort((a, b) => (state.progress[b.id].updatedAt || 0) - (state.progress[a.id].updatedAt || 0));
+        .slice()
+        .sort((a, b) => {
+          const pa = state.progress[a.id];
+          const pb = state.progress[b.id];
+          // 有进度的排前
+          if (pa && pa.percent > 0 && (!pb || pb.percent === 0)) return -1;
+          if (pb && pb.percent > 0 && (!pa || pa.percent === 0)) return 1;
+          // 都有进度按最近更新排
+          if (pa && pb) return (pb.updatedAt || 0) - (pa.updatedAt || 0);
+          return 0;
+        });
     } else if (this._state.tab === 'all') {
       list = purchased;
     } else {
