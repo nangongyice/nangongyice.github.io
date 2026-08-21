@@ -190,10 +190,13 @@
   padding-right: 12px;
   border-right: 2px solid var(--book-color, var(--color-brand));
   padding-inline: 0 14px;
-  transition: opacity 700ms var(--ease-standard), transform 700ms var(--ease-standard);
+  /* 与 slide 完全一致的 duration & easing，确保整体协同 */
+  transition: opacity 1000ms var(--ease-banner),
+              transform 1000ms var(--ease-banner);
 }
 .discover-hero__slide.is-active .hero-book__info { opacity: 1; transform: translateX(0); }
-.discover-hero__slide:not(.is-active) .hero-book__info { opacity: 0; transform: translateX(24px); }
+.discover-hero__slide:not(.is-active):not(.is-outgoing) .hero-book__info { opacity: 0; transform: translateX(24px); }
+.discover-hero__slide.is-outgoing .hero-book__info { opacity: 0; transform: translateX(-16px); }
 
 /* =====================================
    3D 书本主体（书脊 + 封皮 + 前页 + 阴影）
@@ -203,12 +206,19 @@
   width: clamp(240px, 26vw, 320px);
   aspect-ratio: 3 / 4;
   transform-style: preserve-3d;
-  transition: transform 1000ms var(--ease-banner);
-  will-change: transform;
+  /* 与 .discover-hero__slide 完全一致的时长/曲线 */
+  transition: transform 1000ms var(--ease-banner),
+              opacity 1000ms var(--ease-banner);
+  will-change: transform, opacity;
 }
 
-/* 书本入场/激活：随页面一起做 3D 翻转 */
-.discover-hero__slide:not(.is-active) .hero-book {
+/* 书本入场/激活：随页面一起做 3D 翻转
+ * 动画原则：完全 mirror slide 的状态与过渡
+ *   非 active 时 -> 不透明 0, rotateY(18°) 右方隐位 (对应 slide rotateY 90°)
+ *   active 时   -> 不透明 1, rotateY(-6°) 微侧展示 (对应 slide rotateY 0°)
+ *   outgoing 时 -> 不透明 0, rotateY(-28°) 左方翻出 (对应 slide rotateY(-90°))
+ */
+.discover-hero__slide:not(.is-active):not(.is-outgoing) .hero-book {
   opacity: 0;
   transform: rotateY(18deg) translateX(40px) scale(0.96);
 }
@@ -744,12 +754,15 @@
     padding: 10px 16px;
     border-right: none;
     border-top: 2px solid var(--book-color, var(--color-brand));
+    /* 移动端同步为 var(--dur-banner)，与 slide transition 一致 */
+    transition-duration: var(--dur-banner);
   }
-  .discover-hero__slide:not(.is-active) .hero-book__info { transform: translateY(16px); }
+  .discover-hero__slide:not(.is-active):not(.is-outgoing) .hero-book__info { transform: translateY(16px); }
+  .discover-hero__slide.is-outgoing .hero-book__info { transform: translateY(-12px); }
   .hero-book {
     width: clamp(200px, 60vw, 260px);
   }
-  .discover-hero__slide:not(.is-active) .hero-book,
+  .discover-hero__slide:not(.is-active):not(.is-outgoing) .hero-book,
   .discover-hero__slide.is-outgoing .hero-book {
     transform: translateY(20px) scale(0.96);
   }
