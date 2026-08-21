@@ -16,7 +16,7 @@ import { courseMap, creatorMap } from '../data/index.js';
 
 const PAGE_SIZE = 9;
 
-// Hero 轮播的 3 页内容
+// Hero 轮播的 3 页内容 —— 每页右侧有一本同步翻页的书
 const HERO_SLIDES = [
   {
     eyebrow: 'DISCOVER · 发现',
@@ -25,6 +25,18 @@ const HERO_SLIDES = [
     title: '不必通读所有书，\n但该读对的那一本',
     desc: '在 14 门由领域创作者亲述的课程中，找到属于你下一阶段的那一页。',
     tag: 'explore',
+    book: {
+      type: 'course',
+      spine: 'DESIGN · 01',
+      coverTitle: '设计系统',
+      coverSub: '不止组件库',
+      coverAuthor: '林知夏',
+      coverBadge: 'NEW',
+      coverColor: '#E8552B',
+      desc: '拆解 8 个真实产品的设计系统从 0 到 1，从设计语言、组件库、到团队协作的全链路。',
+      meta: ['8 章节', '1 小时 30 分', '¥ 299'],
+      coverImagePrompt: 'design system textbook cover, minimalist typography, warm amber orange hardcover book spine, editorial layout',
+    },
   },
   {
     eyebrow: 'CURATORS · 创作者',
@@ -33,6 +45,18 @@ const HERO_SLIDES = [
     title: '每一门课，\n都是一位创作者的思考结晶',
     desc: '8 位来自设计、工程、写作、心理等领域的资深从业者，把他们多年的经验浓缩成可翻阅的章节。',
     tag: 'creators',
+    book: {
+      type: 'creator',
+      spine: '林知夏',
+      coverTitle: '林知夏',
+      coverSub: '产品设计师 / 创作者',
+      coverAuthor: '「把产品当文学写」',
+      coverBadge: 'Creator',
+      coverColor: '#2E6454',
+      desc: '前字节跳动高级设计师，曾主导飞书、Tiktok 等国际化产品的设计系统工作。',
+      meta: ['8 门课程', '累计 12.6 万字', '9.6 / 10 评分'],
+      portraitPrompt: 'portrait of a thoughtful asian woman product designer in her 30s, soft natural light, dark teal background, editorial photography',
+    },
   },
   {
     eyebrow: 'PHILOSOPHY · 理念',
@@ -41,6 +65,18 @@ const HERO_SLIDES = [
     title: '学习不是填满杯子，\n而是点燃火焰',
     desc: '每一次翻页都是一次重新出发——你读到的不只是知识，更是他人走过的路。',
     tag: 'philosophy',
+    book: {
+      type: 'quote',
+      spine: 'PHILOSOPHY',
+      coverTitle: '点燃火焰',
+      coverSub: '',
+      coverAuthor: '— 苏格拉底',
+      coverBadge: '№ 03',
+      coverColor: '#D97706',
+      quote: '"每一次翻页，\n都是一次重新出发。\n你读到的不只是知识，\n更是他人走过的路。"',
+      meta: ['理念之书', '共 3 卷', '今日新页'],
+      coverImagePrompt: 'abstract gold amber gradient cover art, subtle book texture, literary magazine style, minimal',
+    },
   },
 ];
 
@@ -407,8 +443,12 @@ export default {
   },
 
   _heroSlideHTML(s, i) {
+    const b = s.book || {};
+    const coverStyle = `--book-color: ${b.coverColor || '#E8552B'};`;
+    const coverImg = b.coverImagePrompt ? imageUrl(b.coverImagePrompt, { w: 500 }) : '';
+    const portraitImg = b.portraitPrompt ? imageUrl(b.portraitPrompt, { w: 500 }) : '';
     return `
-      <article class="discover-hero__slide${i === 0 ? ' is-active' : ''}" data-role="hero-slide" data-tag="${s.tag}" data-chapter-index="${s.chapterIndex}" data-label="${s.chapterLabel}">
+      <article class="discover-hero__slide${i === 0 ? ' is-active' : ''}" data-role="hero-slide" data-tag="${s.tag}" data-chapter-index="${s.chapterIndex}" data-label="${s.chapterLabel}" style="${coverStyle}">
         <div class="discover-hero__bg" aria-hidden="true"></div>
         <div class="container discover-hero__content">
           <header class="discover-hero__header">
@@ -417,6 +457,68 @@ export default {
             <h1 class="discover-hero__title">${s.title.replace(/\n/g, '<br/>')}</h1>
             <p class="discover-hero__desc">${s.desc}</p>
           </header>
+
+          <!-- 右侧：同步翻页的书 -->
+          <aside class="discover-hero__book" aria-hidden="false">
+            <div class="hero-book" data-book-type="${b.type || 'course'}">
+              <!-- 阴影层 -->
+              <div class="hero-book__shadow"></div>
+              <!-- 书脊（左侧） -->
+              <div class="hero-book__spine">
+                <span class="hero-book__spine-text">${b.spine || 'NEW PAGE'}</span>
+              </div>
+              <!-- 书本封皮 + 内页 -->
+              <div class="hero-book__cover">
+                <!-- 封面装饰（通用） -->
+                ${coverImg ? `<div class="hero-book__cover-img" style="background-image: url('${coverImg}')"></div>` : ''}
+                <div class="hero-book__cover-veil"></div>
+                <span class="hero-book__badge">${b.coverBadge || ''}</span>
+
+                <!-- 第 1 类：课程书（封面+标题/副标题/作者 + 右下 meta） -->
+                ${b.type === 'course' ? `
+                  <div class="hero-book__cover-body hero-book__body--course">
+                    <h3 class="hero-book__cover-title">${b.coverTitle || ''}</h3>
+                    <p class="hero-book__cover-sub">${b.coverSub || ''}</p>
+                    <p class="hero-book__cover-author">${b.coverAuthor || ''}</p>
+                  </div>
+                  <div class="hero-book__cover-meta">
+                    ${(b.meta || []).map(m => `<span>${m}</span>`).join('')}
+                  </div>
+                ` : ''}
+
+                <!-- 第 2 类：创作者书（上半人像 + 下半信息） -->
+                ${b.type === 'creator' ? `
+                  <div class="hero-book__body--creator">
+                    <div class="hero-book__portrait"${portraitImg ? ` style="background-image: url('${portraitImg}')"` : ''}></div>
+                    <div class="hero-book__creator-info">
+                      <h3 class="hero-book__cover-title">${b.coverTitle || ''}</h3>
+                      <p class="hero-book__cover-sub">${b.coverSub || ''}</p>
+                      <p class="hero-book__cover-quote">${b.coverAuthor || ''}</p>
+                    </div>
+                  </div>
+                  <div class="hero-book__cover-meta">
+                    ${(b.meta || []).map(m => `<span>${m}</span>`).join('')}
+                  </div>
+                ` : ''}
+
+                <!-- 第 3 类：理念金句（大字排版） -->
+                ${b.type === 'quote' ? `
+                  <div class="hero-book__body--quote">
+                    <p class="hero-book__quote-text">${(b.quote || '').replace(/\n/g, '<br/>')}</p>
+                  </div>
+                  <div class="hero-book__cover-meta">
+                    ${(b.meta || []).map(m => `<span>${m}</span>`).join('')}
+                  </div>
+                ` : ''}
+              </div>
+              <!-- 书的前页（书页质感边缘） -->
+              <div class="hero-book__pages"></div>
+            </div>
+            <!-- 书本下方的文字介绍（随轮播显示对应内容） -->
+            <div class="hero-book__info">
+              ${b.desc || ''}
+            </div>
+          </aside>
         </div>
       </article>`;
   },

@@ -134,11 +134,15 @@
     radial-gradient(ellipse 45% 35% at 80% 30%, rgba(217, 119, 6, 0.08), transparent 60%);
 }
 
-/* —— 内容层 —— */
+/* —— 内容层：左侧文案 + 右侧书 两栏布局 —— */
 .discover-hero__content {
   position: relative;
   z-index: 2;
-  padding: clamp(56px, 8vw, 96px) 0 clamp(64px, 6vw, 96px);
+  padding: clamp(56px, 8vw, 96px) 0 clamp(80px, 7vw, 112px);
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(280px, 0.9fr);
+  align-items: center;
+  gap: clamp(24px, 4vw, 64px);
 }
 
 .discover-hero__header {
@@ -164,6 +168,292 @@
   color: var(--color-text-mute);
   max-width: 520px;
   margin: 8px 0 0;
+}
+
+/* —— 右侧：书本容器（竖排居中，书 + 下方介绍文字） —— */
+.discover-hero__book {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 20px;
+  perspective: 1600px;
+}
+
+/* 书本下方介绍文字（淡色小字） */
+.hero-book__info {
+  max-width: 360px;
+  font-size: 13.5px;
+  line-height: 1.75;
+  color: var(--color-text-mute);
+  text-align: right;
+  padding-right: 12px;
+  border-right: 2px solid var(--book-color, var(--color-brand));
+  padding-inline: 0 14px;
+  transition: opacity 700ms var(--ease-standard), transform 700ms var(--ease-standard);
+}
+.discover-hero__slide.is-active .hero-book__info { opacity: 1; transform: translateX(0); }
+.discover-hero__slide:not(.is-active) .hero-book__info { opacity: 0; transform: translateX(24px); }
+
+/* =====================================
+   3D 书本主体（书脊 + 封皮 + 前页 + 阴影）
+   ===================================== */
+.hero-book {
+  position: relative;
+  width: clamp(240px, 26vw, 320px);
+  aspect-ratio: 3 / 4;
+  transform-style: preserve-3d;
+  transition: transform 1000ms var(--ease-banner);
+  will-change: transform;
+}
+
+/* 书本入场/激活：随页面一起做 3D 翻转 */
+.discover-hero__slide:not(.is-active) .hero-book {
+  opacity: 0;
+  transform: rotateY(18deg) translateX(40px) scale(0.96);
+}
+.discover-hero__slide.is-active .hero-book {
+  opacity: 1;
+  transform: rotateY(-6deg) translateX(0) scale(1);
+}
+.discover-hero__slide.is-outgoing .hero-book {
+  opacity: 0;
+  transform: rotateY(-28deg) translateX(-40px) scale(0.94);
+}
+
+/* 投影（随书本翻书角度变化浓淡） */
+.hero-book__shadow {
+  position: absolute;
+  bottom: -28px;
+  left: 5%;
+  right: -6%;
+  height: 32px;
+  background: radial-gradient(ellipse 55% 50% at 65% 50%, rgba(26, 26, 26, 0.26), transparent 70%);
+  filter: blur(6px);
+  z-index: 0;
+}
+
+/* 书脊（左窄条，带竖排文字） */
+.hero-book__spine {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 22px;
+  background: linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--book-color, var(--color-brand)) 70% #1a1a1a) 0%,
+    var(--book-color, var(--color-brand)) 100%
+  );
+  border-radius: 4px 0 0 4px;
+  box-shadow: 2px 0 0 rgba(26, 26, 26, 0.14), inset -2px 0 4px rgba(26, 26, 26, 0.3);
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.hero-book__spine-text {
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  color: rgba(250, 247, 241, 0.92);
+  font-size: 11px;
+  letter-spacing: 0.3em;
+  font-weight: var(--fw-medium);
+  white-space: nowrap;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.4);
+}
+
+/* 书页纸边缘（多层叠加，模拟 80 页） */
+.hero-book__pages {
+  position: absolute;
+  top: 6px;
+  bottom: 6px;
+  right: -2px;
+  width: 6px;
+  background:
+    linear-gradient(180deg, #f5f2ea 0%, #ece7da 100%);
+  border-radius: 0 2px 2px 0;
+  z-index: 2;
+  box-shadow:
+    inset 1px 0 0 #e2ddcf,
+    inset 3px 0 0 rgba(255,255,255,0.5),
+    0 0 0 1px rgba(26,26,26,0.04);
+}
+.hero-book__pages::before,
+.hero-book__pages::after {
+  content: '';
+  position: absolute;
+  left: 2px;
+  right: 0;
+  height: 1px;
+  background: rgba(26,26,26,0.05);
+}
+.hero-book__pages::before { top: 18%; }
+.hero-book__pages::after { top: 62%; }
+
+/* 封皮（主要面：主色 + 内容 + 装饰） */
+.hero-book__cover {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background:
+    linear-gradient(135deg, color-mix(in srgb, var(--book-color, var(--color-brand)) 95% white) 0%, var(--book-color, var(--color-brand)) 55%, color-mix(in srgb, var(--book-color, var(--color-brand)) 85% #1a1a1a) 100%);
+  border-radius: 0 6px 6px 0;
+  overflow: hidden;
+  box-shadow:
+    0 0 0 1px rgba(26,26,26,0.08),
+    0 18px 40px -12px rgba(26, 26, 26, 0.35),
+    0 6px 14px -4px rgba(26, 26, 26, 0.2),
+    inset 2px 0 0 rgba(255,255,255,0.06);
+  z-index: 4;
+}
+
+/* 封面底图（课程/理念有封面背景图） */
+.hero-book__cover-img {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  opacity: 0.26;
+  mix-blend-mode: luminosity;
+  z-index: 0;
+}
+/* 封面面纱（半透明叠加，让文字可读） */
+.hero-book__cover-veil {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(160deg, rgba(250, 247, 241, 0.08) 0%, transparent 40%),
+    linear-gradient(0deg, rgba(26, 26, 26, 0.22) 0%, transparent 55%);
+  z-index: 1;
+  pointer-events: none;
+}
+/* 右上角 badge */
+.hero-book__badge {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  z-index: 6;
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  font-weight: var(--fw-semibold);
+  color: rgba(250, 247, 241, 0.94);
+  background: rgba(250, 247, 241, 0.1);
+  border: 1px solid rgba(250, 247, 241, 0.26);
+  padding: 4px 9px 4px 10px;
+  border-radius: 100px;
+  backdrop-filter: blur(4px);
+}
+
+/* 通用：封面标题组 */
+.hero-book__cover-title {
+  color: #fff;
+  font-family: var(--font-cn);
+  font-size: clamp(22px, 2.4vw, 30px);
+  font-weight: var(--fw-bold);
+  line-height: 1.2;
+  letter-spacing: 0.02em;
+  margin: 0;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.2);
+}
+.hero-book__cover-sub {
+  color: rgba(250, 247, 241, 0.86);
+  font-size: clamp(12px, 1.1vw, 14px);
+  margin: 4px 0 0;
+  letter-spacing: 0.03em;
+}
+.hero-book__cover-author {
+  color: rgba(250, 247, 241, 0.74);
+  font-size: 11.5px;
+  margin: 10px 0 0;
+  font-style: italic;
+  letter-spacing: 0.06em;
+}
+.hero-book__cover-quote {
+  color: rgba(250, 247, 241, 0.88);
+  font-size: 11.5px;
+  margin: 10px 0 0;
+  letter-spacing: 0.04em;
+  font-style: italic;
+  line-height: 1.5;
+}
+
+/* 封面右下 meta 条（三格信息） */
+.hero-book__cover-meta {
+  position: absolute;
+  bottom: 16px;
+  left: 22px;
+  right: 18px;
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  z-index: 6;
+}
+.hero-book__cover-meta > span {
+  font-size: 10.5px;
+  letter-spacing: 0.08em;
+  color: rgba(250, 247, 241, 0.92);
+  background: rgba(250, 247, 241, 0.1);
+  border: 1px solid rgba(250, 247, 241, 0.22);
+  padding: 3px 8px;
+  border-radius: 4px;
+  backdrop-filter: blur(3px);
+}
+
+/* === 类型 1：课程书（左上角大标题 + 右下 meta） === */
+.hero-book__body--course {
+  position: absolute;
+  top: 36px;
+  left: 24px;
+  right: 20px;
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+/* === 类型 2：创作者书（上部人像 + 下部信息） === */
+.hero-book__body--creator {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+}
+.hero-book__portrait {
+  flex: 0 0 58%;
+  background-size: cover;
+  background-position: center top;
+  mask-image: linear-gradient(180deg, #000 60%, transparent 100%);
+  -webkit-mask-image: linear-gradient(180deg, #000 60%, transparent 100%);
+}
+.hero-book__creator-info {
+  flex: 1;
+  padding: 10px 22px 48px 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+/* === 类型 3：理念金句（居中竖排大字，引语风格） === */
+.hero-book__body--quote {
+  position: absolute;
+  inset: 56px 28px 60px 32px;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+}
+.hero-book__quote-text {
+  color: #fff;
+  font-family: var(--font-cn);
+  font-size: clamp(16px, 1.6vw, 20px);
+  line-height: 1.9;
+  letter-spacing: 0.05em;
+  font-weight: var(--fw-medium);
+  text-shadow: 0 1px 4px rgba(0,0,0,0.3);
+  margin: 0;
 }
 
 /* —— Chrome 控制层 —— */
@@ -440,9 +730,30 @@
   }
   .discover-hero__slide.is-active { transform: translateX(0); }
   .discover-hero__slide.is-outgoing { transform: translateX(-100%); }
-  .discover-hero__content { padding: clamp(40px, 6vw, 64px) 0 clamp(56px, 5vw, 72px); }
+  .discover-hero__content {
+    grid-template-columns: 1fr;
+    padding: clamp(40px, 6vw, 64px) 0 clamp(56px, 5vw, 72px);
+    gap: 32px;
+  }
   .discover-hero__title { font-size: clamp(28px, 7vw, 40px); }
   .discover-hero__desc { font-size: 15px; }
+  .discover-hero__book { align-items: center; }
+  .hero-book__info {
+    max-width: 100%;
+    text-align: center;
+    padding: 10px 16px;
+    border-right: none;
+    border-top: 2px solid var(--book-color, var(--color-brand));
+  }
+  .discover-hero__slide:not(.is-active) .hero-book__info { transform: translateY(16px); }
+  .hero-book {
+    width: clamp(200px, 60vw, 260px);
+  }
+  .discover-hero__slide:not(.is-active) .hero-book,
+  .discover-hero__slide.is-outgoing .hero-book {
+    transform: translateY(20px) scale(0.96);
+  }
+  .discover-hero__slide.is-active .hero-book { transform: none; }
   .discover-hero__chrome { bottom: 16px; padding-inline: 20px; }
   .discover-hero__arrow { width: 32px; height: 32px; }
   .discover-hero__dot { width: 24px; }
