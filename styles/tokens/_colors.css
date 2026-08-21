@@ -1,8 +1,9 @@
 /* ============================================================
    _colors.css — 色彩令牌
-   策略：白/米白/浅灰基底 + 深墨文字 + 少量高饱和品牌色
+   策略：默认暖琥珀橙 + 米白浅基底，支持 6 套色系 × 2 种模式
    ============================================================ */
 
+/* —— 默认兜底：palette=amber, theme=light（无 data 属性时生效） —— */
 :root {
   /* —— 基底（纸感） —— */
   --color-bg-cream: #FAF7F1;        /* 全站主背景 */
@@ -42,4 +43,154 @@
   /* —— 透明叠加层（用于浮层/遮罩） —— */
   --color-overlay: rgba(26, 26, 26, 0.45);
   --color-scrim:   rgba(250, 247, 241, 0.78);
+}
+
+/* ============================================================
+   Theme: 6 套色系 × 2 种模式 (data-palette × data-theme)
+   palette: amber | forest | ocean | lavender | sakura | midnight
+   theme:   light | dark
+   ============================================================ */
+
+/* ---------- Palette 1: 琥珀橙 Amber (默认品牌色) ---------- */
+:root[data-palette="amber"][data-theme="light"] {
+  --color-bg-cream: #FAF7F1; --color-bg-white: #FFFFFF; --color-bg-mist: #F2EEE5; --color-bg-dark: #1A1A1A;
+  --color-text-ink: #1A1A1A; --color-text-mute: #5C5852; --color-text-faint: #9A958C; --color-text-inv: #FAF7F1;
+  --color-border: #E6DFD3; --color-border-strong: #D7CDB9;
+  --color-brand: #E8552B; --color-brand-deep: #C8421C; --color-brand-soft: #FBE4D8; --color-brand-ink: #7A2A0E;
+  --color-accent-ink: #1F2D4A;
+  --gradient-brand: linear-gradient(135deg, #E8552B 0%, #C8421C 100%);
+  --gradient-paper: linear-gradient(180deg, #FAF7F1 0%, #F2EEE5 100%);
+  --gradient-warm:  linear-gradient(135deg, #FBE4D8 0%, #FAF7F1 60%, #FFFFFF 100%);
+  --color-overlay: rgba(26,26,26,0.45); --color-scrim: rgba(250,247,241,0.78);
+}
+:root[data-palette="amber"][data-theme="dark"] {
+  --color-bg-cream: #16130F; --color-bg-white: #1D1914; --color-bg-mist: #262119; --color-bg-dark: #0D0B08;
+  --color-text-ink: #F2E8D7; --color-text-mute: #B9AE9A; --color-text-faint: #7A7264; --color-text-inv: #16130F;
+  --color-border: #2E2820; --color-border-strong: #3E3528;
+  --color-brand: #F38358; --color-brand-deep: #FF9A76; --color-brand-soft: #4E2A1A; --color-brand-ink: #FFD2B9;
+  --color-accent-ink: #C0CCE5;
+  --gradient-brand: linear-gradient(135deg, #F38358 0%, #E06430 100%);
+  --gradient-paper: linear-gradient(180deg, #16130F 0%, #1D1914 100%);
+  --gradient-warm:  linear-gradient(135deg, #2A1D13 0%, #16130F 60%, #1D1914 100%);
+  --color-overlay: rgba(0,0,0,0.6); --color-scrim: rgba(22,19,15,0.78);
+}
+
+/* ---------- Palette 2: 墨绿 Forest ---------- */
+:root[data-palette="forest"][data-theme="light"] {
+  --color-bg-cream: #F2F4F0; --color-bg-white: #FFFFFF; --color-bg-mist: #E3E8DE; --color-bg-dark: #1A261F;
+  --color-text-ink: #102A1C; --color-text-mute: #4E6B5B; --color-text-faint: #8AA293; --color-text-inv: #F2F4F0;
+  --color-border: #D3DCD0; --color-border-strong: #B7C6B1;
+  --color-brand: #2E6454; --color-brand-deep: #1F4A3E; --color-brand-soft: #D5E5DD; --color-brand-ink: #0E382C;
+  --color-accent-ink: #1F2D4A;
+  --gradient-brand: linear-gradient(135deg, #2E6454 0%, #1F4A3E 100%);
+  --gradient-paper: linear-gradient(180deg, #F2F4F0 0%, #E3E8DE 100%);
+  --gradient-warm:  linear-gradient(135deg, #D5E5DD 0%, #F2F4F0 60%, #FFFFFF 100%);
+  --color-overlay: rgba(16,42,28,0.45); --color-scrim: rgba(242,244,240,0.78);
+}
+:root[data-palette="forest"][data-theme="dark"] {
+  --color-bg-cream: #0F1612; --color-bg-white: #152019; --color-bg-mist: #1E2B22; --color-bg-dark: #080C0A;
+  --color-text-ink: #E3ECE4; --color-text-mute: #A2B7A9; --color-text-faint: #6D8576; --color-text-inv: #0F1612;
+  --color-border: #23322A; --color-border-strong: #2E4436;
+  --color-brand: #4DA386; --color-brand-deep: #6EC2A5; --color-brand-soft: #163629; --color-brand-ink: #BBE7D2;
+  --color-accent-ink: #A9B9DA;
+  --gradient-brand: linear-gradient(135deg, #4DA386 0%, #2E7E65 100%);
+  --gradient-paper: linear-gradient(180deg, #0F1612 0%, #152019 100%);
+  --gradient-warm:  linear-gradient(135deg, #12261C 0%, #0F1612 60%, #152019 100%);
+  --color-overlay: rgba(0,0,0,0.6); --color-scrim: rgba(15,22,18,0.78);
+}
+
+/* ---------- Palette 3: 深海蓝 Ocean ---------- */
+:root[data-palette="ocean"][data-theme="light"] {
+  --color-bg-cream: #EEF3F7; --color-bg-white: #FFFFFF; --color-bg-mist: #DEE7EF; --color-bg-dark: #10233A;
+  --color-text-ink: #0E2238; --color-text-mute: #486179; --color-text-faint: #8298AE; --color-text-inv: #EEF3F7;
+  --color-border: #D0DAE5; --color-border-strong: #B5C5D6;
+  --color-brand: #2B5FA0; --color-brand-deep: #1B477F; --color-brand-soft: #D6E4F5; --color-brand-ink: #0E2E5A;
+  --color-accent-ink: #14305A;
+  --gradient-brand: linear-gradient(135deg, #2B5FA0 0%, #1B477F 100%);
+  --gradient-paper: linear-gradient(180deg, #EEF3F7 0%, #DEE7EF 100%);
+  --gradient-warm:  linear-gradient(135deg, #D6E4F5 0%, #EEF3F7 60%, #FFFFFF 100%);
+  --color-overlay: rgba(14,34,56,0.45); --color-scrim: rgba(238,243,247,0.78);
+}
+:root[data-palette="ocean"][data-theme="dark"] {
+  --color-bg-cream: #0B1420; --color-bg-white: #101F30; --color-bg-mist: #17283E; --color-bg-dark: #060C14;
+  --color-text-ink: #DFE9F4; --color-text-mute: #9AB0C8; --color-text-faint: #6A839F; --color-text-inv: #0B1420;
+  --color-border: #1A2B42; --color-border-strong: #263D5C;
+  --color-brand: #528BD6; --color-brand-deep: #77ABF0; --color-brand-soft: #142A49; --color-brand-ink: #BFD5F5;
+  --color-accent-ink: #CBD5EC;
+  --gradient-brand: linear-gradient(135deg, #528BD6 0%, #2F6DB8 100%);
+  --gradient-paper: linear-gradient(180deg, #0B1420 0%, #101F30 100%);
+  --gradient-warm:  linear-gradient(135deg, #11223A 0%, #0B1420 60%, #101F30 100%);
+  --color-overlay: rgba(0,0,0,0.6); --color-scrim: rgba(11,20,32,0.78);
+}
+
+/* ---------- Palette 4: 暮山紫 Lavender ---------- */
+:root[data-palette="lavender"][data-theme="light"] {
+  --color-bg-cream: #F6F2F8; --color-bg-white: #FFFFFF; --color-bg-mist: #E9E1F0; --color-bg-dark: #271A3A;
+  --color-text-ink: #251645; --color-text-mute: #67517F; --color-text-faint: #9D8CB3; --color-text-inv: #F6F2F8;
+  --color-border: #DED3E8; --color-border-strong: #C5B4D8;
+  --color-brand: #7B4FB7; --color-brand-deep: #5C3790; --color-brand-soft: #E6D9F5; --color-brand-ink: #3F1F6D;
+  --color-accent-ink: #1F2D4A;
+  --gradient-brand: linear-gradient(135deg, #7B4FB7 0%, #5C3790 100%);
+  --gradient-paper: linear-gradient(180deg, #F6F2F8 0%, #E9E1F0 100%);
+  --gradient-warm:  linear-gradient(135deg, #E6D9F5 0%, #F6F2F8 60%, #FFFFFF 100%);
+  --color-overlay: rgba(37,22,69,0.45); --color-scrim: rgba(246,242,248,0.78);
+}
+:root[data-palette="lavender"][data-theme="dark"] {
+  --color-bg-cream: #130C1E; --color-bg-white: #1E1331; --color-bg-mist: #291B44; --color-bg-dark: #0A0713;
+  --color-text-ink: #EDE5F7; --color-text-mute: #B3A3CF; --color-text-faint: #7E6DA1; --color-text-inv: #130C1E;
+  --color-border: #2D1E48; --color-border-strong: #3E2C60;
+  --color-brand: #A67FE0; --color-brand-deep: #C19EF0; --color-brand-soft: #2C1A50; --color-brand-ink: #DFC8FB;
+  --color-accent-ink: #C1CBEC;
+  --gradient-brand: linear-gradient(135deg, #A67FE0 0%, #7D55BE 100%);
+  --gradient-paper: linear-gradient(180deg, #130C1E 0%, #1E1331 100%);
+  --gradient-warm:  linear-gradient(135deg, #1E1340 0%, #130C1E 60%, #1E1331 100%);
+  --color-overlay: rgba(0,0,0,0.6); --color-scrim: rgba(19,12,30,0.78);
+}
+
+/* ---------- Palette 5: 樱粉 Sakura ---------- */
+:root[data-palette="sakura"][data-theme="light"] {
+  --color-bg-cream: #FCF3F3; --color-bg-white: #FFFFFF; --color-bg-mist: #F5E2E4; --color-bg-dark: #3A1A24;
+  --color-text-ink: #3D1A23; --color-text-mute: #7C4C58; --color-text-faint: #B38E99; --color-text-inv: #FCF3F3;
+  --color-border: #EED7DA; --color-border-strong: #DEBFC4;
+  --color-brand: #C94A6C; --color-brand-deep: #A0324F; --color-brand-soft: #F6D7DE; --color-brand-ink: #6B1D32;
+  --color-accent-ink: #1F2D4A;
+  --gradient-brand: linear-gradient(135deg, #C94A6C 0%, #A0324F 100%);
+  --gradient-paper: linear-gradient(180deg, #FCF3F3 0%, #F5E2E4 100%);
+  --gradient-warm:  linear-gradient(135deg, #F6D7DE 0%, #FCF3F3 60%, #FFFFFF 100%);
+  --color-overlay: rgba(61,26,35,0.45); --color-scrim: rgba(252,243,243,0.78);
+}
+:root[data-palette="sakura"][data-theme="dark"] {
+  --color-bg-cream: #1A0E12; --color-bg-white: #27141A; --color-bg-mist: #361C25; --color-bg-dark: #0C0608;
+  --color-text-ink: #F3DEE1; --color-text-mute: #C599A3; --color-text-faint: #8C6872; --color-text-inv: #1A0E12;
+  --color-border: #3A1C24; --color-border-strong: #502935;
+  --color-brand: #E37895; --color-brand-deep: #F49FB7; --color-brand-soft: #491D2C; --color-brand-ink: #FCC9D7;
+  --color-accent-ink: #CAD1EC;
+  --gradient-brand: linear-gradient(135deg, #E37895 0%, #C85172 100%);
+  --gradient-paper: linear-gradient(180deg, #1A0E12 0%, #27141A 100%);
+  --gradient-warm:  linear-gradient(135deg, #2D121A 0%, #1A0E12 60%, #27141A 100%);
+  --color-overlay: rgba(0,0,0,0.6); --color-scrim: rgba(26,14,18,0.78);
+}
+
+/* ---------- Palette 6: 暗夜 Midnight (低饱和中性灰蓝，深色模式可用) ---------- */
+:root[data-palette="midnight"][data-theme="light"] {
+  --color-bg-cream: #F1F2F4; --color-bg-white: #FFFFFF; --color-bg-mist: #E0E3E8; --color-bg-dark: #1B2030;
+  --color-text-ink: #171C27; --color-text-mute: #51596B; --color-text-faint: #8B93A5; --color-text-inv: #F1F2F4;
+  --color-border: #D4D8E0; --color-border-strong: #B9BFCB;
+  --color-brand: #374151; --color-brand-deep: #202735; --color-brand-soft: #DDDFE5; --color-brand-ink: #141925;
+  --color-accent-ink: #1F2D4A;
+  --gradient-brand: linear-gradient(135deg, #374151 0%, #202735 100%);
+  --gradient-paper: linear-gradient(180deg, #F1F2F4 0%, #E0E3E8 100%);
+  --gradient-warm:  linear-gradient(135deg, #DDDFE5 0%, #F1F2F4 60%, #FFFFFF 100%);
+  --color-overlay: rgba(23,28,39,0.45); --color-scrim: rgba(241,242,244,0.78);
+}
+:root[data-palette="midnight"][data-theme="dark"] {
+  --color-bg-cream: #0D0F14; --color-bg-white: #14171E; --color-bg-mist: #1C202A; --color-bg-dark: #07080C;
+  --color-text-ink: #E3E6EC; --color-text-mute: #9AA0AE; --color-text-faint: #676D7C; --color-text-inv: #0D0F14;
+  --color-border: #232833; --color-border-strong: #2F3544;
+  --color-brand: #7B8398; --color-brand-deep: #97A0B5; --color-brand-soft: #2A2F3B; --color-brand-ink: #C8CCD7;
+  --color-accent-ink: #B4BED9;
+  --gradient-brand: linear-gradient(135deg, #7B8398 0%, #545C70 100%);
+  --gradient-paper: linear-gradient(180deg, #0D0F14 0%, #14171E 100%);
+  --gradient-warm:  linear-gradient(135deg, #181B23 0%, #0D0F14 60%, #14171E 100%);
+  --color-overlay: rgba(0,0,0,0.65); --color-scrim: rgba(13,15,20,0.82);
 }

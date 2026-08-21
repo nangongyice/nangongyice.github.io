@@ -1,8 +1,9 @@
 // ============================================================
 // main.js — 应用入口
-// 启动顺序：Header → Footer → Cursor → Toast → 注册路由 → 启动路由
+// 启动顺序：ThemeService → Header → Footer → Cursor → Toast → 注册路由 → 启动路由
 // ============================================================
 
+import { initTheme, onThemeChange, getThemeState } from '../core/theme.js';
 import { Header } from '../components/Header.js';
 import { Footer } from '../components/Footer.js';
 import { Cursor } from '../components/Cursor.js';
@@ -18,6 +19,19 @@ import CheckoutView from '../pages/checkout.js';
 import BookshelfView from '../pages/bookshelf.js';
 import LearningView from '../pages/learning.js';
 import LoginView from '../pages/login.js';
+
+// —— 1. 初始化主题服务（已在 <head> 里提前设了 data 属性做防闪烁，这里再统一初始化 + 订阅系统亮暗） ——
+initTheme();
+onThemeChange(() => {
+  // 同步 theme-color 到浏览器顶栏（按应用后的实际 theme）
+  try {
+    const t = getThemeState();
+    const applied = t.appliedTheme;
+    const brandBg = applied === 'dark' ? '#16130F' : '#FAF7F1';
+    const tc = document.querySelector('meta[name="theme-color"]');
+    if (tc) tc.setAttribute('content', brandBg);
+  } catch {}
+});
 
 registerAll([
   HomeView,

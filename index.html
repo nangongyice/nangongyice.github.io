@@ -17,6 +17,39 @@
 
   <!-- 主样式 -->
   <link rel="stylesheet" href="styles/main.css" />
+
+  <!-- 防止主题闪烁（FART prevention）：在 CSS 解析后、主 JS 执行前就把 data 属性设好 -->
+  <script>
+  (function () {
+    try {
+      var LS_KEY = 'newpage:theme';
+      var DEFAULT_PALETTE = 'amber';
+      var DEFAULT_MODE = 'auto';
+      var palette = DEFAULT_PALETTE;
+      var mode = DEFAULT_MODE;
+      var raw = localStorage.getItem(LS_KEY);
+      if (raw) {
+        try {
+          var saved = JSON.parse(raw);
+          if (saved && typeof saved === 'object') {
+            if (typeof saved.palette === 'string' && saved.palette.length) palette = saved.palette;
+            if (typeof saved.mode    === 'string' && saved.mode.length)    mode    = saved.mode;
+          }
+        } catch (_) {}
+      }
+      var applied = (mode === 'dark') ? 'dark'
+                  : (mode === 'light') ? 'light'
+                  : (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) ? 'dark' : 'light';
+      var html = document.documentElement;
+      html.setAttribute('data-palette', palette);
+      html.setAttribute('data-theme',   applied);
+      // 同步 theme-color 到浏览器顶栏
+      var brandBg = applied === 'dark' ? '#16130F' : '#FAF7F1';
+      var tc = document.querySelector('meta[name="theme-color"]');
+      if (tc) tc.setAttribute('content', brandBg);
+    } catch (_) {}
+  })();
+  </script>
 </head>
 <body>
   <div id="app">
